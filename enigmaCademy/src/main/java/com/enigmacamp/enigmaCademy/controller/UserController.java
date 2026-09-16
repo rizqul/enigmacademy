@@ -2,6 +2,7 @@ package com.enigmacamp.enigmaCademy.controller;
 
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.service.UserService;
+import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +26,22 @@ public class UserController {
     @GetMapping
     public List<User> getAllUser(){
         return  userService.findAllUser();
+    }
+
+    @GetMapping("/search")
+    public List<User> getByName(@RequestParam String name){
+
+        return userService.findByName(name);
+    }
+
+    @GetMapping("/search-contain")
+    public List<User> getByNameContaining(@RequestParam String name){
+
+        return userService.findByNameContaining(name);
+    }
+
+    @GetMapping("/count")
+    public long countByUserRole(@RequestParam UserRole role){
+        return userService.countByRole(role);
     }
 }

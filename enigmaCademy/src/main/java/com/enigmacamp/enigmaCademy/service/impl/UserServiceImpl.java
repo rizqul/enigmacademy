@@ -3,6 +3,7 @@ package com.enigmacamp.enigmaCademy.service.impl;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;
+import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,5 +29,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllUser() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    @Override
+    public List<User> findByNameContaining(String name) {
+        return userRepository.findByNameContaining(name);
+    }
+
+    @Override
+    public long countByRole(UserRole role) {
+        return userRepository.countByRole(role);
     }
 }
