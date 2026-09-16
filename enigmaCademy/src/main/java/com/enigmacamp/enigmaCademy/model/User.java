@@ -1,11 +1,11 @@
 package com.enigmacamp.enigmaCademy.model;
 
-import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 
 @Entity
 @Table(name = "users")
