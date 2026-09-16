@@ -7,7 +7,7 @@ import com.enigmacamp.enigmaCademy.utils.exception.DuplicateNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -74,6 +74,23 @@ public class CategoryServiceImpl implements CategoryService {
         updateCategory.setDescription(category.getDescription());
 
         return categoryRepository.save(updateCategory);
+
+    }
+
+    @Override
+    public List<Category> findByKeyword(String keyword){
+        if(keyword.trim().isEmpty()){
+            throw new NullPointerException("keyword tidak boleh kosong");
+        }
+
+        List<Category> categories = categoryRepository.findByNameContaining(keyword);
+        List<Category> categories2 = categoryRepository.findByDescriptionContaining(keyword);
+
+        Set<Category> newHashSet = new HashSet<>();
+        newHashSet.addAll(categories);
+        newHashSet.addAll(categories2);
+
+        return newHashSet.stream().toList();
 
     }
 }

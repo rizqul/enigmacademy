@@ -5,6 +5,8 @@ import com.enigmacamp.enigmaCademy.service.CategoryService;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
@@ -22,6 +24,11 @@ public class CategoryController {
     @PutMapping
     public Category update(@RequestBody Category category) {
         return categoryService.update(category);
+    }
+
+    @GetMapping
+    public List<Category> findByKeyword(@RequestParam String keyword){
+        return categoryService.findByKeyword(keyword);
     }
 
 }
