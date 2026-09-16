@@ -12,6 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> { // this will
     List<User> findByNameContaining(String name);
 
     //custom query
-    @Query("SELECT COUNT(u) FROM USER u WHERE u.role=:role")
+    @Query("SELECT COUNT(u) FROM USER u WHERE u.userRole=:role")
     long countByRole(UserRole role);
 }
