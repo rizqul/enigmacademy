@@ -3,10 +3,9 @@ package com.enigmacamp.enigmaCademy.controller;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users") // to use base url for the app
@@ -21,5 +20,10 @@ public class UserController {
     @PostMapping("/create") // this tell that this will perform POST method, this will concat with the @RequestMapping url so this will be : /api/users/create.
     public User createUser(@RequestBody User user){
         return userService.saveUser(user);
+    }
+
+    @GetMapping
+    public List<User> getAllUser(){
+        return  userService.findAllUser();
     }
 }

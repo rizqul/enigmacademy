@@ -6,6 +6,8 @@ import com.enigmacamp.enigmaCademy.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service // this is to implement IoC. for mark so the spring boot will know that this is needed to create
 public class UserServiceImpl implements UserService {
 
@@ -16,10 +18,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional // use from the spring framework
+    @Transactional // use from the spring framework to implement EntityTransaction.
     public User saveUser(User user) {
         // Validation
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAllUser() {
+        return userRepository.findAll();
     }
 }
