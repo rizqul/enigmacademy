@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service // this is to implement IoC. for mark so the spring boot will know that this is needed to create
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional // use from the spring framework to implement EntityTransaction.
+    @Transactional(readOnly = false) // use from the spring framework to implement EntityTransaction.
     public User saveUser(User user) {
         // Validation
 
