@@ -93,5 +93,38 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<CommonResponse<List<UserResponse>>> searchUser(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email
+    ) {
+        SearchUserRequest request = SearchUserRequest.builder()
+                .name(name)
+                .email(email)
+                .build();
+
+        List<UserResponse> userResponses = userService.searchUsers(request);
+
+        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("ok")
+                .data(userResponses)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
