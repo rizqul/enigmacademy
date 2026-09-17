@@ -28,13 +28,10 @@ public class CategoryController {
         return categoryService.save(category);
     }
 
-    // bikin ini
-    @PutMapping
-    public CategoryResponse update(@RequestBody CategoryRequest categoryRequest) {
-        // return categoryService.update(category);
-//         Category category= new Category(categoryRequest);
-         Category category= new Category(categoryRequest.getId(), categoryRequest.getName(), categoryRequest.getDescription());
-        return convertToCategoryResponse(categoryService.update(category));
+    @PutMapping("/{id}")
+    public CategoryResponse update(@PathVariable Long id , @RequestBody CategoryRequest categoryRequest) {
+         Category category= new Category(categoryRequest.getName(), categoryRequest.getDescription());
+        return convertToCategoryResponse(categoryService.update(id, category));
     }
 
     // bikin ini

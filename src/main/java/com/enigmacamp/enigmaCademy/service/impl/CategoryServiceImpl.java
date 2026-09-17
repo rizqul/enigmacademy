@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category update(Category category) {
+    public Category update(Long id, Category category) {
 
         if (category.getName()==null){
             throw new NullPointerException("Nama Tidak Boleh Null!");
@@ -55,11 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new NullPointerException("Description Tidak Boleh Null!");
         }
 
-//        if (categoryRepository.existsByName(category.getName())){
-//            throw new DuplicateNameException("Nama Tidak Boleh Sama!");
-//        }
-
-        Optional<Category> oldCategory = findById(category.getId());
+        Optional<Category> oldCategory = findById(id);
 
         if (oldCategory.isEmpty()) {
             throw new IllegalArgumentException("Id Tidak Ditemukan");
