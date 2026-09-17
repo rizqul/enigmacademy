@@ -37,20 +37,18 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 2. **Buat Class untuk Specification**
 
 ```java
-public class MenuSpecification {
-    public static Specification<Menu> getSpecification(SearchMenuRequest request) {
+public class UserSpecification {
+    public static Specification<User> getSpecification(SearchUserRequest request) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             
             // Tambahkan kondisi sesuai request
-            if (request.getNama() != null && !request.getNama().isEmpty()) {
-                predicates.add(
-                    criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("nama")), 
-                        "%" + request.getNama().toLowerCase() + "%"
-                    )
-                );
-            }
+           if (request.getName() != null && !request.getName().isEmpty()) {
+              predicates.add(
+                      criteriaBuilder.like(
+                              criteriaBuilder.lower(root.get("name")),
+                              "%" + request.getName().toLowerCase() + "%"));
+           }
             
             // Kondisi lainnya
             // ...
@@ -64,10 +62,15 @@ public class MenuSpecification {
 3. **Gunakan Specification di Service**
 
 ```java
-public List<MenuResponse> searchMenus(SearchMenuRequest request) {
-    Specification<Menu> specification = MenuSpecification.getSpecification(request);
-    List<Menu> menus = menuRepository.findAll(specification);
-    return MenuMapper.toResponseList(menus);
+public List<UserResponse> searchUsers(SearchUserRequest request) {
+   // 1. get specification
+   Specification<User> specification = UserSpecification.getSpecification(request);
+
+   // 2. menjalankan query dengan specification
+   List<User> users = userRepository.findAll(specification);
+
+   // 3. mengubah hasil menjadi response DTOs
+   return UserMapper.convertToUserListResponse(users);
 }
 ```
 
@@ -75,7 +78,7 @@ public List<MenuResponse> searchMenus(SearchMenuRequest request) {
 
 1. **Root** (`root`)
     - Merepresentasikan entity yang menjadi dasar query
-    - Digunakan untuk mengakses atribut entity: `root.get("nama")`
+    - Digunakan untuk mengakses atribut entity: `root.get("name")`
 
 2. **CriteriaQuery** (`query`)
     - Merepresentasikan query yang sedang dibangun
@@ -93,28 +96,51 @@ public List<MenuResponse> searchMenus(SearchMenuRequest request) {
 
 ```java
 // Equal
-criteriaBuilder.equal(root.get("kategori"), "Makanan");
+criteriaBuilder.equal(root.get("email"), "budi@gmail.com");
 
 // Like (case insensitive)
-criteriaBuilder.like(criteriaBuilder.lower(root.get("nama")), "%ayam%");
+        criteriaBuilder.like(
+        criteriaBuilder.lower(root.get("nama")),
+        "%budi%"
+        );
 
 // Greater Than
-criteriaBuilder.greaterThan(root.get("harga"), 50000);
+        criteriaBuilder.greaterThan(
+        root.get("createdAt"),
+        LocalDateTime.of(2026, 1, 1, 0, 0)
+);
+
+// Greater Than or Equal
+        criteriaBuilder.greaterThanOrEqualTo(
+        root.get("createdAt"),
+        LocalDateTime.of(2026, 1, 1, 0, 0)
+);
 
 // Between
-criteriaBuilder.between(root.get("harga"), 10000, 50000);
+        criteriaBuilder.between(
+        root.get("createdAt"),
+        LocalDateTime.of(2026, 1, 1, 0, 0),
+        LocalDateTime.of(2026, 9, 1, 0, 0)
+);
 
 // AND
-criteriaBuilder.and(predicate1, predicate2);
+        criteriaBuilder.and(predicate1, predicate2);
 
 // OR
 criteriaBuilder.or(predicate1, predicate2);
 
 // IN
-root.get("kategori").in("Makanan", "Minuman");
+root.get("email").in(
+        "budi@gmail.com",
+                "andi@gmail.com",
+                "siti@gmail.com"
+);
 
 // IS NULL
-criteriaBuilder.isNull(root.get("deskripsi"));
+criteriaBuilder.isNull(root.get("email"));
+
+// IS NOT NULL
+        criteriaBuilder.isNotNull(root.get("email"));
 ```
 
 ## Perbandingan dengan Query Methods
