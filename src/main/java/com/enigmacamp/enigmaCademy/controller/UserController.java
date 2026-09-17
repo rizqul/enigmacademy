@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,59 +27,58 @@ public class UserController {
     }
 
     // create user baru
-//    @PostMapping
-//    public ResponseEntity<CommonResponse<UserResponse>> createUser(@RequestBody UserRequest request) {
-//        User newUser = new User(
-//                request.getName(),
-//                request.getEmail()
-//        );
-//        userService.saveUser(newUser);
-//        UserResponse userResponse = convertToUserResponse(newUser);
-//
-//        CommonResponse<UserResponse> response = CommonResponse.<UserResponse>builder()
-//                .statusCode(HttpStatus.CREATED.value())
-//                .message("user sudah berhasil ditambahkan")
-//                .data(userResponse)
-//                .build();
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-//    }
+    @PostMapping
+    public ResponseEntity<CommonResponse<String>> createUser(@RequestBody UserRequest request) {
+        User newUser = new User(
+                request.getName(),
+                request.getEmail());
+        userService.saveUser(newUser);
+
+        CommonResponse<String> response = CommonResponse.<String>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("user sudah berhasil ditambahkan")
+                .data("OK")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
     // get all
-//    @GetMapping
-//    public ResponseEntity<CommonResponse<List<UserResponse>>> findAllUser() {
-//        List<User> users = userService.findAllUser();
-//        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
-//                .statusCode(HttpStatus.OK.value())
-//                .message("ok")
-//                .data(convertToUserListResponse(users))
-//                .build();
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(response);
-//    }
+    // @GetMapping
+    // public ResponseEntity<CommonResponse<List<UserResponse>>> findAllUser() {
+    // List<User> users = userService.findAllUser();
+    // CommonResponse<List<UserResponse>> response =
+    // CommonResponse.<List<UserResponse>>builder()
+    // .statusCode(HttpStatus.OK.value())
+    // .message("ok")
+    // .data(convertToUserListResponse(users))
+    // .build();
+    //
+    // return ResponseEntity.status(HttpStatus.OK).body(response);
+    // }
 
     // find by Name
-//    @GetMapping("/search/by-name")
-//    public List<User> findByName(@RequestParam String name) {
-//        return userService.findByName(name);
-//    }
-//
-//    @GetMapping("/search/by-email")
-//    public List<User> findByEmail(@RequestParam String email) {
-//        return userService.findByEmail(email);
-//    }
-//
-//    // find by name containing some alphabet
-//    @GetMapping("/search")
-//    public List<User> findByNameContaining(@RequestParam String name) {
-//        return userService.findByNameContaining(name);
-//    }
-//
-//    // count by role
-//    @GetMapping("/count")
-//    public long countByRole(@RequestParam UserRole role) {
-//        return userService.countUserByRole(role);
-//    }
+    // @GetMapping("/search/by-name")
+    // public List<User> findByName(@RequestParam String name) {
+    // return userService.findByName(name);
+    // }
+    //
+    // @GetMapping("/search/by-email")
+    // public List<User> findByEmail(@RequestParam String email) {
+    // return userService.findByEmail(email);
+    // }
+    //
+    // // find by name containing some alphabet
+    // @GetMapping("/search")
+    // public List<User> findByNameContaining(@RequestParam String name) {
+    // return userService.findByNameContaining(name);
+    // }
+    //
+    // // count by role
+    // @GetMapping("/count")
+    // public long countByRole(@RequestParam UserRole role) {
+    // return userService.countUserByRole(role);
+    // }
 
     @PostMapping("/search")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUsers(@RequestBody SearchUserRequest request) {
@@ -96,11 +96,14 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUser(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email
-    ) {
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String createdAt) {
         SearchUserRequest request = SearchUserRequest.builder()
                 .name(name)
                 .email(email)
+                .userRole(role)
+                .createdAt(createdAt)
                 .build();
 
         List<UserResponse> userResponses = userService.searchUsers(request);
@@ -113,18 +116,5 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

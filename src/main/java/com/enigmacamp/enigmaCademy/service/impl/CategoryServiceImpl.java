@@ -1,9 +1,14 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
+import com.enigmacamp.enigmaCademy.dto.request.SearchCategoryRequest;
+import com.enigmacamp.enigmaCademy.dto.response.CategoryResponse;
+import com.enigmacamp.enigmaCademy.mapper.CategoryMapper;
 import com.enigmacamp.enigmaCademy.model.Category;
 import com.enigmacamp.enigmaCademy.repository.CategoryRepository;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
+import com.enigmacamp.enigmaCademy.specification.CategorySpecification;
 import com.enigmacamp.enigmaCademy.utils.exception.DuplicateNameException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,5 +93,14 @@ public class CategoryServiceImpl implements CategoryService {
 
         return newHashSet.stream().toList();
 
+    }
+
+    @Override
+    public List<CategoryResponse> searchCategories(SearchCategoryRequest request) {
+        Specification<Category> specification = CategorySpecification.getSpacification(request);
+
+        List<Category> categories = categoryRepository.findAll(specification);
+
+        return CategoryMapper.convertToListOfCategoryResponse(categories);
     }
 }
