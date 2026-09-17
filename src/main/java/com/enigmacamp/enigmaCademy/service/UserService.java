@@ -1,5 +1,6 @@
 package com.enigmacamp.enigmaCademy.service;
 
+import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.model.User;
@@ -14,4 +15,5 @@ public interface UserService {
     List<User> findByEmail(String email);
     List<User> findByNameContaining(String name);
     long countUserByRole(UserRole role);
+    List<UserResponse> searchUsers(SearchUserRequest request);
 }
