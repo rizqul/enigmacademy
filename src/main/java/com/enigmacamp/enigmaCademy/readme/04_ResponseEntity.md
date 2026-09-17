@@ -35,7 +35,7 @@ Dengan menerapkan CommonResponse, client dapat dengan mudah memproses respons AP
 
 ## Struktur Package
 ```
-com.enigmaCademy
+com.enigmacamp.enigmaCademy
 ├── controller
 │   └── UserController.java
 ├── dto
