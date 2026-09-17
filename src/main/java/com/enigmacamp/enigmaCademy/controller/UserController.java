@@ -59,7 +59,8 @@ public class UserController {
         CommonResponse<UserResponse> response = CommonResponse.<UserResponse>builder()
                 .statusCode(HttpStatus.CREATED.value())
                 .message("user sudah berhasil ditambahkan")
-                .data(userResponse).build();
+                .data(userResponse)
+                .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -76,13 +77,6 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
-    // get by id
-//    @GetMapping("/{id}") // http://localhost:8080/api/users/{id}
-//    public User getById(@RequestBody Long id) {
-//        return ;
-//    }
-
 
     // find by Name
     @GetMapping("/search/by-name")
