@@ -23,6 +23,13 @@ public class CategoryController {
         return new CategoryResponse(ca.getId(), ca.getName(), ca.getDescription());
     }
 
+    // mapper find by keyword
+    private List<CategoryResponse> convertToListOfCategoryResponse(List<Category> categories) {
+        return categories.stream()
+                .map(this::convertToCategoryResponse)
+                .toList();
+    }
+
     @PostMapping
     public Category save(@RequestBody Category category){
         return categoryService.save(category);
@@ -35,9 +42,9 @@ public class CategoryController {
     }
 
     // bikin ini
-    @GetMapping
-    public List<Category> findByKeyword(@RequestParam String keyword){
-        return categoryService.findByKeyword(keyword);
+    @GetMapping("/keyword")
+    public List<CategoryResponse> findByKeyword(@RequestParam String keyword){
+        return convertToListOfCategoryResponse(categoryService.findByKeyword(keyword));
     }
 
 }
