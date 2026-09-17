@@ -1,10 +1,14 @@
 package com.enigmacamp.enigmaCademy.controller;
 
+import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
+import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,10 +20,46 @@ public class UserController {
         this.userService = userService;
     }
 
-    // create
+    // mapper
+    // mapper untuk create
+    private UserResponse convertToUserResponse(User user){
+        // 1. instansiate
+        UserResponse userResponse = new UserResponse();
+
+        // 2. set value
+        userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setUserRole(user.getUserRole());
+        return userResponse;
+    }
+
+    // maper untuk list
+    private List<UserResponse> convertToUserListResponse(List<User> users) {
+        List<UserResponse> listOfUsers = users.stream()
+                .map(this::convertToUserResponse)
+                .toList();
+        return  listOfUsers;
+    }
+
+
+    // create user baru
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public UserResponse createUser(@RequestBody UserRequest request) {
+        User newUser = new User(
+                request.getName(),
+                request.getEmail()
+        );
+        userService.saveUser(newUser);
+        return convertToUserResponse(newUser);
+    }
+
+    // get all
+    @GetMapping
+    public List<UserResponse> findAllUser() {
+        List<User> users = userService.findAllUser();
+
+        return convertToUserListResponse(users);
     }
 
     // get by id
@@ -28,11 +68,6 @@ public class UserController {
 //        return ;
 //    }
 
-    // get all
-    @GetMapping
-    public List<User> findAllUser() {
-        return userService.findAllUser();
-    }
 
     // find by Name
     @GetMapping("/search/by-name")

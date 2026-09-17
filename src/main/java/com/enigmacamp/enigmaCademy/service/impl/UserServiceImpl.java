@@ -1,5 +1,6 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
+
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;

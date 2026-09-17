@@ -1,5 +1,7 @@
 package com.enigmacamp.enigmaCademy.service;
 
+import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
+import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 
