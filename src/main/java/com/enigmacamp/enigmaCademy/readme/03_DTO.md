@@ -28,7 +28,7 @@ DTO adalah objek yang dibuat khusus untuk keperluan transfer data antar lapisan 
 
 ## Struktur Package
 ```
-com.learning.step_by_step
+com.enigmacamp.com.enigmaCademy
 ├── controller
 │   └── UserController.java
 ├── dto
