@@ -1,5 +1,7 @@
 package com.enigmacamp.enigmaCademy.service;
 
+import com.enigmacamp.enigmaCademy.dto.request.SearchCategoryRequest;
+import com.enigmacamp.enigmaCademy.dto.response.CategoryResponse;
 import com.enigmacamp.enigmaCademy.model.Category;
 
 import java.util.List;
@@ -11,4 +13,6 @@ public interface CategoryService {
     Category update(Long id, Category category);
 
     List<Category> findByKeyword(String keyword);
+
+    List<CategoryResponse> searchCategories(SearchCategoryRequest request);
 }
