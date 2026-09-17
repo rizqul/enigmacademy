@@ -1,11 +1,13 @@
 package com.enigmacamp.enigmaCademy.model;
 
+import com.enigmacamp.enigmaCademy.dto.request.CategoryRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "categories")
 public class Category extends BaseEntity {
@@ -22,4 +24,5 @@ public class Category extends BaseEntity {
         this.name = name;
         this.description = description;
     }
+
 }
