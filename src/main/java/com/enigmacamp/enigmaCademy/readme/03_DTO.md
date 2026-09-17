@@ -18,8 +18,8 @@ DTO adalah objek yang dibuat khusus untuk keperluan transfer data antar lapisan 
 - **Response DTO** - Untuk mengirim data ke client
 
 ## Apa yang akan kita buat
-1. `MenuRequest` - DTO untuk menerima data menu dari client
-2. `MenuResponse` - DTO untuk mengirim data menu ke client
+1. `UserRequest` - DTO untuk menerima data menu dari client
+2. `UserResponse` - DTO untuk mengirim data menu ke client
 3. Update controller untuk menggunakan DTO
 
 ## Implementasi
