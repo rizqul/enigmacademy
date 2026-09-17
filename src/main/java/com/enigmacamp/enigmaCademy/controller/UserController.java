@@ -1,11 +1,14 @@
 package com.enigmacamp.enigmaCademy.controller;
 
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
+import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -45,13 +48,20 @@ public class UserController {
 
     // create user baru
     @PostMapping
-    public UserResponse createUser(@RequestBody UserRequest request) {
+    public ResponseEntity<CommonResponse<UserResponse>> createUser(@RequestBody UserRequest request) {
         User newUser = new User(
                 request.getName(),
                 request.getEmail()
         );
         userService.saveUser(newUser);
-        return convertToUserResponse(newUser);
+        UserResponse userResponse = convertToUserResponse(newUser);
+
+        CommonResponse<UserResponse> response = CommonResponse.<UserResponse>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("user sudah berhasil ditambahkan")
+                .data(userResponse).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED). body(response);
     }
 
     // get all
