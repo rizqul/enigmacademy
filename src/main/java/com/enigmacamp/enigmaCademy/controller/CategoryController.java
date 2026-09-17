@@ -21,11 +21,13 @@ public class CategoryController {
         return categoryService.save(category);
     }
 
+    // bikin ini
     @PutMapping
     public Category update(@RequestBody Category category) {
         return categoryService.update(category);
     }
 
+    // bikin ini
     @GetMapping
     public List<Category> findByKeyword(@RequestParam String keyword){
         return categoryService.findByKeyword(keyword);
