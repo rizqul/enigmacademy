@@ -61,7 +61,7 @@ public class UserController {
                 .message("user sudah berhasil ditambahkan")
                 .data(userResponse).build();
 
-        return ResponseEntity.status(HttpStatus.CREATED). body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // get all
