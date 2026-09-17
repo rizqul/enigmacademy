@@ -28,6 +28,7 @@ public class CategoryController {
         return categoryService.save(category);
     }
 
+    // bikin ini
     @PutMapping
     public CategoryResponse update(@RequestBody CategoryRequest categoryRequest) {
         // return categoryService.update(category);
@@ -36,6 +37,7 @@ public class CategoryController {
         return convertToCategoryResponse(categoryService.update(category));
     }
 
+    // bikin ini
     @GetMapping
     public List<Category> findByKeyword(@RequestParam String keyword){
         return categoryService.findByKeyword(keyword);
