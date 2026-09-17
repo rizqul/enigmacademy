@@ -28,16 +28,16 @@ public class UserController {
 
     // create user baru
     @PostMapping
-    public ResponseEntity<CommonResponse<String>> createUser(@RequestBody UserRequest request) {
+    public ResponseEntity<CommonResponse<UserResponse>> createUser(@RequestBody UserRequest request) {
         User newUser = new User(
                 request.getName(),
                 request.getEmail());
-        userService.saveUser(newUser);
+        UserResponse userResponse = userService.saveUser(newUser);
 
-        CommonResponse<String> response = CommonResponse.<String>builder()
+        CommonResponse<UserResponse> response = CommonResponse.<UserResponse>builder()
                 .statusCode(HttpStatus.CREATED.value())
                 .message("user sudah berhasil ditambahkan")
-                .data("OK")
+                .data(userResponse)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

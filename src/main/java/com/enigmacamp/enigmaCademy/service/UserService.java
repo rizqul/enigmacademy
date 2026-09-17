@@ -9,7 +9,7 @@ import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import java.util.List;
 
 public interface UserService {
-    User saveUser(User user);
+    UserResponse saveUser(User user);
     List<User> findAllUser();
     List<User> findByName(String name);
     List<User> findByEmail(String email);

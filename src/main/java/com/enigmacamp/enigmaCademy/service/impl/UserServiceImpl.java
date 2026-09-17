@@ -27,10 +27,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User saveUser(User user) {
+    public UserResponse saveUser(User user) {
         // validasi code
-
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+        return UserMapper.convertToUserResponse(newUser);
     }
 
     @Override
