@@ -66,10 +66,15 @@ public class UserController {
 
     // get all
     @GetMapping
-    public List<UserResponse> findAllUser() {
+    public ResponseEntity<CommonResponse<List<UserResponse>>> findAllUser() {
         List<User> users = userService.findAllUser();
+        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("ok")
+                .data(convertToUserListResponse(users))
+                .build();
 
-        return convertToUserListResponse(users);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // get by id
