@@ -80,13 +80,7 @@ public class UserController {
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUsers(@RequestBody SearchUserRequest request) {
         List<UserResponse> userResponses = userService.searchUsers(request);
 
-        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("ok")
-                .data(userResponses)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, userResponses);
     }
 
     @GetMapping("/search")
@@ -104,13 +98,7 @@ public class UserController {
 
         List<UserResponse> userResponses = userService.searchUsers(request);
 
-        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("ok")
-                .data(userResponses)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, userResponses);
     }
 
 }
