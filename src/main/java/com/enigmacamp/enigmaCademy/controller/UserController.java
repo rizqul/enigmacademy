@@ -136,6 +136,4 @@ public class UserController {
                 userResponses.getContent(),
                 userResponses);
     }
-
-
 }
