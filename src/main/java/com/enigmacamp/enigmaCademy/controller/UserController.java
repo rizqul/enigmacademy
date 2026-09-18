@@ -106,7 +106,7 @@ public class UserController {
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchWithPaging(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
-            @RequestParam(required = false) String role,
+            @RequestParam(required = false, defaultValue = "STUDENT") String role,
             @RequestParam(required = false) String createdAt,
 //            @RequestParam(defaultValue = "1") Integer page,
 //            @RequestParam(defaultValue = "10") Integer size,
