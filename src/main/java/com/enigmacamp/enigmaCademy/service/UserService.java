@@ -5,6 +5,7 @@ import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UserService {
     List<User> findByNameContaining(String name);
     long countUserByRole(UserRole role);
     List<UserResponse> searchUsers(SearchUserRequest request);
+
+    Page<UserResponse> searchUserWithPagination(SearchUserRequest request);
 }

@@ -13,8 +13,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class SearchUserRequest {
+    // filtering fields
     private String name;
     private String email;
     private String userRole;
     private String createdAt;
+
+    // pagination dan sorting
+    private Integer page;
+    private Integer size;
+    private String sortBy;
+    private String direction;
 }
