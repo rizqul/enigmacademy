@@ -7,6 +7,8 @@ import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.mapper.UserMapper;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.service.UserService;
+import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
+import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.http.HttpStatus;
@@ -34,13 +36,7 @@ public class UserController {
                 request.getEmail());
         UserResponse userResponse = userService.saveUser(newUser);
 
-        CommonResponse<UserResponse> response = CommonResponse.<UserResponse>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("user sudah berhasil ditambahkan")
-                .data(userResponse)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseUtil.buildResponse(HttpStatus.CREATED, ResponseMessage.SUCCES_CREATE_DATA, userResponse);
     }
 
     // get all
