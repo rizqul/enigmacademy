@@ -10,6 +10,7 @@ import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import jakarta.validation.Valid;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class UserController {
 
     // create user baru
     @PostMapping
-    public ResponseEntity<CommonResponse<UserResponse>> createUser(@RequestBody UserRequest request) {
+    public ResponseEntity<CommonResponse<UserResponse>> createUser(@Valid @RequestBody UserRequest request) {
         User newUser = new User(
                 request.getName(),
                 request.getEmail());
