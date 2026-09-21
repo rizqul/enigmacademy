@@ -10,6 +10,7 @@ import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users") // to use base url for the app
+@RequestMapping("/api/v1/users") // to use base url for the app
 public class UserController {
     private final UserService userService;
 
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/create") // this tell that this will perform POST method, this will concat with the @RequestMapping url so this will be : /api/users/create.
-    public ResponseEntity<CommonResponse<UserResponse>> createUser(@RequestBody UserRequest request){
+    public ResponseEntity<CommonResponse<UserResponse>> createUser(@Valid @RequestBody UserRequest request){ // @Valid to validate what ever validation you put in entity
 
         User newUser = new User(request.getName(), request.getEmail());
 
