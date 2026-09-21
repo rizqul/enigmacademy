@@ -10,6 +10,7 @@ import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
 import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,6 +37,18 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse saveUser(UserRequest userRequest) {
         // validasi code
+        if (userRequest.getName() == null || userRequest.getName().isBlank()) {
+            throw new BadRequestException("Field name tidak boleh kosong.");
+        }
+
+        if (userRequest.getEmail() == null || userRequest.getEmail().isBlank()) {
+            throw new BadRequestException("Field email tidak boleh kosong.");
+        }
+
+//        if (userRequest.getUserRole() == null) {
+//            throw new BadRequestException("Field userRole tidak boleh kosong.");
+//        }
+
         UserRole userRole = (userRequest.getUserRole() != null && !userRequest.getUserRole().isBlank()) ? UserRole.valueOf(userRequest.getUserRole()) : UserRole.STUDENT;
 
         User newUser = new User(
