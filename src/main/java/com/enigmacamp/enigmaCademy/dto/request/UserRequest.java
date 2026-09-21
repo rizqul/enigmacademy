@@ -18,7 +18,7 @@ public class UserRequest {
 
     @NotBlank
     @Email(message = "email tidak sesuai aturan", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
-    @Size(max = 10, groups = ValidationGroups.OnCreate.class)
+    @Size(max = 40, groups = ValidationGroups.OnCreate.class)
     private String email;
 
     @NotBlank
