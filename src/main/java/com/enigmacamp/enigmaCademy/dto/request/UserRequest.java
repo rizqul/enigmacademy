@@ -1,6 +1,7 @@
 package com.enigmacamp.enigmaCademy.dto.request;
 
 import com.enigmacamp.enigmaCademy.utils.validators.ValidLmsEmail;
+import com.enigmacamp.enigmaCademy.utils.validators.ValidUserRole;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,8 @@ public class UserRequest {
     @Email(message = "email tidak sesuai aturan")
     private String email;
 
+    @NotBlank
+    @ValidUserRole
     private String userRole;
 
 //    @Min(17)
