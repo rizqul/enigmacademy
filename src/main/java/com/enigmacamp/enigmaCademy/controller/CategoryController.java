@@ -7,6 +7,7 @@ import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.model.Category;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
 import com.enigmacamp.enigmaCademy.service.UserService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category save(@RequestBody Category category){
+    public Category save(@Valid @RequestBody Category category){
         return categoryService.save(category);
     }
 
