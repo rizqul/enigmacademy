@@ -15,10 +15,6 @@ public class UserRoleValidator implements ConstraintValidator<ValidUserRole, Str
           return true;
       }
 
-      if(UserRole.isValid(value.toUpperCase())){
-          return true;
-      } else {
-          return  false;
-      }
+      return UserRole.isValid(value.toUpperCase());
     }
 }
