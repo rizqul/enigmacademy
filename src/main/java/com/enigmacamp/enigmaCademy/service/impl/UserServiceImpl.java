@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,9 +47,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUser() {
+    public List<UserResponse> findAllUser() {
         // validasi code
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        return UserMapper.convertToUserListResponse(users);
+    }
+
+    @Override
+    public UserResponse getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return UserMapper.convertToUserResponse(user.get());
     }
 
     @Override

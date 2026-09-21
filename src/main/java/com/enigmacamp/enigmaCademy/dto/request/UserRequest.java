@@ -2,6 +2,7 @@ package com.enigmacamp.enigmaCademy.dto.request;
 
 import com.enigmacamp.enigmaCademy.utils.validators.ValidLmsEmail;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidUserRole;
+import com.enigmacamp.enigmaCademy.utils.validators.ValidationGroups;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,15 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @ValidLmsEmail
 public class UserRequest {
-    @NotBlank(message = "nama tidak boleh kosong")
+    @NotBlank(message = "nama tidak boleh kosong", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
     private String name;
 
     @NotBlank
-    @Email(message = "email tidak sesuai aturan")
+    @Email(message = "email tidak sesuai aturan", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
+    @Size(max = 10, groups = ValidationGroups.OnCreate.class)
     private String email;
 
     @NotBlank
-    @ValidUserRole
+    @ValidUserRole(groups = {ValidationGroups.OnCreate.class})
     private String userRole;
 
 //    @Min(17)

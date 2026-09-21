@@ -10,11 +10,13 @@ import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import com.enigmacamp.enigmaCademy.utils.validators.ValidationGroups;
 import jakarta.validation.Valid;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -32,29 +34,29 @@ public class UserController {
 
     // create user baru
     @PostMapping
-    public ResponseEntity<CommonResponse<UserResponse>> createUser(@Valid @RequestBody UserRequest request) {
-        UserRequest newUser = new UserRequest(
-                request.getName(),
-                request.getEmail(),
-                request.getUserRole());
-        UserResponse userResponse = userService.saveUser(newUser);
+    public ResponseEntity<CommonResponse<UserResponse>> createUser(
+            @Validated(ValidationGroups.OnCreate.class)
+            @RequestBody UserRequest request) {
+        UserResponse userResponse = userService.saveUser(request);
 
         return ResponseUtil.buildResponse(HttpStatus.CREATED, ResponseMessage.SUCCES_CREATE_DATA, userResponse);
     }
 
-    // get all
-    // @GetMapping
-    // public ResponseEntity<CommonResponse<List<UserResponse>>> findAllUser() {
-    // List<User> users = userService.findAllUser();
-    // CommonResponse<List<UserResponse>> response =
-    // CommonResponse.<List<UserResponse>>builder()
-    // .statusCode(HttpStatus.OK.value())
-    // .message("ok")
-    // .data(convertToUserListResponse(users))
-    // .build();
-    //
-    // return ResponseEntity.status(HttpStatus.OK).body(response);
-    // }
+     // get all
+     @GetMapping
+     public ResponseEntity<CommonResponse<List<UserResponse>>> findAllUser() {
+     List<UserResponse> users = userService.findAllUser();
+
+     return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, users);
+     }
+
+
+     // get by id
+    @GetMapping("/{id}")
+    public ResponseEntity<CommonResponse<UserResponse>> getUserById(@PathVariable Long id) {
+        UserResponse menuResponse = userService.getUserById(id);
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, menuResponse);
+    }
 
     // find by Name
     // @GetMapping("/search/by-name")
