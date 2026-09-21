@@ -15,12 +15,10 @@ public class CategoryNameValidator implements ConstraintValidator<ValidCategoryN
             return true;
         }
 
-        for (String cat : categoryName){
-            if (!cat.toLowerCase().equals(value.toLowerCase())){
-                return false;
-            }
+        if (categoryName.contains(value.toLowerCase())){
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

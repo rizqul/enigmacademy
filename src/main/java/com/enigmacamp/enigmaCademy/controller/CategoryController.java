@@ -25,8 +25,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category save(@Valid @RequestBody Category category){
-        return categoryService.save(category);
+    public Category save(@Valid @RequestBody CategoryRequest category){
+        return categoryService.save(new Category(category.getName(), category.getDescription()));
     }
 
 //    @PutMapping("/{id}")
