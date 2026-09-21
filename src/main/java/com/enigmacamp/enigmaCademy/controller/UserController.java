@@ -33,9 +33,10 @@ public class UserController {
     // create user baru
     @PostMapping
     public ResponseEntity<CommonResponse<UserResponse>> createUser(@Valid @RequestBody UserRequest request) {
-        User newUser = new User(
+        UserRequest newUser = new UserRequest(
                 request.getName(),
-                request.getEmail());
+                request.getEmail(),
+                request.getUserRole());
         UserResponse userResponse = userService.saveUser(newUser);
 
         return ResponseUtil.buildResponse(HttpStatus.CREATED, ResponseMessage.SUCCES_CREATE_DATA, userResponse);

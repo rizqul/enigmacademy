@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface UserService {
-    UserResponse saveUser(User user);
+    UserResponse saveUser(UserRequest userRequest);
     List<User> findAllUser();
     List<User> findByName(String name);
     List<User> findByEmail(String email);

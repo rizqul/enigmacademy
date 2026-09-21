@@ -15,11 +15,11 @@ public class LmsEmailValidator implements ConstraintValidator<ValidLmsEmail, Use
             return true;
         }
 
-//        if(request.getEmail() == null || request.getUserRole() == null) {
-//            return true;
-//        }
+        if(request.getEmail() == null || request.getUserRole() == null) {
+            return true;
+        }
 
-        if( request.getUserRole() == null || request.getUserRole().isBlank()) {
+        if(request.getUserRole().equals(UserRole.STUDENT.toString())){
             return request.getEmail().endsWith("@student.enigmacademy.com");
         }
 
@@ -27,6 +27,6 @@ public class LmsEmailValidator implements ConstraintValidator<ValidLmsEmail, Use
             return request.getEmail().endsWith("@enigmacademy.com");
         }
 
-        return false;
+        return true;
     }
 }

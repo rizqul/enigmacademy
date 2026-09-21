@@ -2,6 +2,7 @@ package com.enigmacamp.enigmaCademy.service.impl;
 
 
 import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
+import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.mapper.UserMapper;
 import com.enigmacamp.enigmaCademy.model.User;
@@ -31,10 +32,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse saveUser(User user) {
+    public UserResponse saveUser(UserRequest userRequest) {
         // validasi code
-        User newUser = userRepository.save(user);
-        return UserMapper.convertToUserResponse(newUser);
+        UserRole userRole = (userRequest.getUserRole() != null && !userRequest.getUserRole().isBlank()) ? UserRole.valueOf(userRequest.getUserRole()) : UserRole.STUDENT;
+
+        User newUser = new User(
+                userRequest.getName(),
+                userRequest.getEmail(),
+                userRole);
+
+        User savedUser = userRepository.save(newUser);
+        return UserMapper.convertToUserResponse(savedUser);
     }
 
     @Override

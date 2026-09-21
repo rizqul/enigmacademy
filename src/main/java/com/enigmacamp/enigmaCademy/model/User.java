@@ -22,9 +22,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public User(String name, String email) {
+    public User(String name, String email, UserRole userRole) {
         this.name = name;
         this.email = email;
-        this.userRole = UserRole.STUDENT;
+        this.userRole = userRole;
     }
 }
