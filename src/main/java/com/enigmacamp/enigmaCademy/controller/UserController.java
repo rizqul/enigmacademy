@@ -11,6 +11,7 @@ import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class UserController {
 
         UserResponse newUserResponse = UserMapper.convertToUserResponse(userService.saveUser(newUser));
 
-        return ResponseUtil.builResponse(HttpStatus.CREATED, ResponseMessage.SUCCESS_CREATE_USER, newUserResponse);
+        return ResponseUtil.buildResponse(HttpStatus.CREATED, ResponseMessage.SUCCESS_CREATE_USER, newUserResponse);
     }
 
     @GetMapping
@@ -59,6 +60,19 @@ public class UserController {
         return userService.countByRole(role);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<CommonResponse<List<UserResponse>>> searchUsers(@RequestBody SearchUserRequest request) {
+        List<UserResponse> userResponses = userService.searchUsers(request);
+
+        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("ok")
+                .data(userResponses)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping("/search")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUser(
         @RequestParam(required = false) String name,
@@ -75,12 +89,33 @@ public class UserController {
 
         List<UserResponse> userResponses = userService.searchUsers(request);
 
-        CommonResponse<List<UserResponse>> response = CommonResponse.<List<UserResponse>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("result is here")
-                .data(userResponses)
+        return ResponseUtil.buildResponse(HttpStatus.CREATED, ResponseMessage.SUCCESS_GET_USERS, userResponses);
+    }
+
+    @GetMapping("/advance-search/page")
+    public ResponseEntity<CommonResponse<List<UserResponse>>> searchUser(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String createdAt,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder
+    ) {
+        SearchUserRequest request = SearchUserRequest.builder()
+                .name(name)
+                .email(email)
+                .userRole(role)
+                .createdAt(createdAt)
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortOrder(sortOrder)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        Page<UserResponse> userResponses = userService.searchUsersWithPagination(request);
+
+        return ResponseUtil.buildResponse(HttpStatus.CREATED, ResponseMessage.SUCCESS_GET_USERS, userResponses.getContent(), userResponses);
     }
 }

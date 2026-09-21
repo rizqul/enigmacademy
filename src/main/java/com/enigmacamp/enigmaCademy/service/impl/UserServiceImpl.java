@@ -8,6 +8,10 @@ import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,5 +63,29 @@ public class UserServiceImpl implements UserService {
         List<User> users =userRepository.findAll(specification);
 
         return UserMapper.convertToUserResponseList(users);
+    }
+
+    @Override
+    public Page<UserResponse> searchUsersWithPagination(SearchUserRequest request) {
+        // 1. page, size, sortBy, sortOrdering default values
+        // for anticipate if front end didnt send the right request.
+        int page = (request.getPage() == null || request.getPage() <= 0) ? 0 : request.getPage() - 1;
+        int size = (request.getSize() == null || request.getSize() <= 0) ? 10 : request.getSize();
+        String sortBy = (request.getSortBy() == null || request.getSortBy().isEmpty()) ? "id" : request.getSortBy();
+        String sortOrder = (request.getSortOrder() == null || request.getSortOrder().isEmpty()) ? "asc" : request.getSortOrder();
+
+        // 2. specification
+        Specification<User> specification = UserSpecification.getSpecification(request);
+
+        // 3. pageRequest and sorting method
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+
+        Page<User> userPage = userRepository.findAll(specification, pageRequest);
+
+        List<UserResponse> userResponses = UserMapper.convertToUserResponseList(userPage.getContent());
+
+        return new PageImpl<>(userResponses, pageRequest, userPage.getTotalElements());
     }
 }
