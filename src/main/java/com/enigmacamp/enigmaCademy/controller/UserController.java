@@ -45,15 +45,15 @@ public class UserController {
      // get all
      @GetMapping
      public ResponseEntity<CommonResponse<List<UserResponse>>> findAllUser() {
-     List<UserResponse> users = userService.findAllUser();
+        List<UserResponse> users = userService.findAllUser();
 
-     return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, users);
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, users);
      }
 
 
      // get by id
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<UserResponse>> getUserById(@PathVariable Long id) {
+     @GetMapping("/{id}")
+     public ResponseEntity<CommonResponse<UserResponse>> getUserById(@PathVariable Long id) {
         UserResponse menuResponse = userService.getUserById(id);
         return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, menuResponse);
     }

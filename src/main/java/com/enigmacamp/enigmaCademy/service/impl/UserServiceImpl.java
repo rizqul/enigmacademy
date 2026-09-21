@@ -10,6 +10,7 @@ import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
+import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -55,8 +56,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return UserMapper.convertToUserResponse(user.get());
+
+        User user = userRepository.findById(id)
+                .orElseThrow( () -> new ResourceNotFoundException("user", "id", id));
+
+        return UserMapper.convertToUserResponse(user);
     }
 
     @Override
