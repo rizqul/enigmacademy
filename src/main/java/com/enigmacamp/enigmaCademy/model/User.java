@@ -1,9 +1,7 @@
 package com.enigmacamp.enigmaCademy.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,13 +16,15 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    
+
     private String username;
 
     @Column(unique = true)
@@ -35,11 +35,12 @@ public class User extends BaseEntity implements UserDetails {
 
     private String password;
 
-    public User(String name, String email, String password, UserRole userRole) {
-        this.username = name;
+    public User(String name, String username, String email, UserRole userRole, String password) {
+        this.name = name;
+        this.username = username;
         this.email = email;
-        this.password = password;
         this.userRole = userRole;
+        this.password = password;
     }
 
     @Override

@@ -46,9 +46,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         User newUser = new User(
                 userRequest.getName(),
+                userRequest.getUsername(),
                 userRequest.getEmail(),
-                userRequest.getPassword(),
-                userRole);
+                userRole,
+                userRequest.getPassword());
 
         User savedUser = userRepository.save(newUser);
         return UserMapper.convertToUserResponse(savedUser);
