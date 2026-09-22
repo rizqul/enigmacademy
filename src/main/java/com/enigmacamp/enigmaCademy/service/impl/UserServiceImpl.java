@@ -8,6 +8,7 @@ import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
+import com.enigmacamp.enigmaCademy.utils.constants.TableNames;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
 import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -99,6 +101,32 @@ public class UserServiceImpl implements UserService {
         User newUser = userRepository.save(user);
 
         return UserMapper.convertToUserResponse(newUser);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse deleteById(Long id) {
+
+        if (id == null || id <= 0){
+            throw new BadRequestException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
+
+        userRepository.deleteById(id);
+        return UserMapper.convertToUserResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse softDeleteById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(TableNames.USER, "id", id));
+
+        user.setName("del_" + user.getName());
+        user.setDeletedAt(LocalDateTime.now());
+
+        User deletedUser = userRepository.save(user);
+        return UserMapper.convertToUserResponse(deletedUser);
     }
 
     @Override

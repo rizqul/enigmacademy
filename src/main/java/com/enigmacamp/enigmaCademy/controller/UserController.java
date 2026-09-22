@@ -66,6 +66,20 @@ public class UserController {
         return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_UPDATE_DATA, userResponse);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommonResponse<UserResponse>> deleteById(@PathVariable Long id) {
+        UserResponse userResponse = userService.deleteById(id);
+
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_DELETE_DATA, userResponse);
+    }
+
+    @DeleteMapping("/soft-delete/{id}")
+    public ResponseEntity<CommonResponse<UserResponse>> softDeleteById(@PathVariable Long id) {
+        UserResponse userResponse = userService.softDeleteById(id);
+
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_DELETE_DATA, userResponse);
+    }
+
     @PostMapping("/search")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUsers(@RequestBody SearchUserRequest request) {
         List<UserResponse> userResponses = userService.searchUsers(request);

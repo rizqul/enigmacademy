@@ -15,5 +15,7 @@ public interface UserService {
     UserResponse getUserById(Long id);
     List<UserResponse> searchUsers(SearchUserRequest request);
     UserResponse updateById(Long id, UserRequest userRequest);
+    UserResponse deleteById(Long id);
+    UserResponse softDeleteById(Long id);
     Page<UserResponse> searchUserWithPagination(SearchUserRequest request);
 }
