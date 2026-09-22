@@ -7,7 +7,7 @@ import com.enigmacamp.enigmaCademy.model.Category;
 import com.enigmacamp.enigmaCademy.repository.CategoryRepository;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
 import com.enigmacamp.enigmaCademy.specification.CategorySpecification;
-import com.enigmacamp.enigmaCademy.utils.exception.DuplicateNameException;
+import com.enigmacamp.enigmaCademy.utils.exception.DuplicateResourceException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new NullPointerException("Description Tidak Boleh Null!");
         }
         if (categoryRepository.existsByName(category.getName())){
-            throw new DuplicateNameException("Nama Sudah Ada!");
+            throw new DuplicateResourceException("Nama Sudah Ada!");
         }
         return categoryRepository.save(category);
     }

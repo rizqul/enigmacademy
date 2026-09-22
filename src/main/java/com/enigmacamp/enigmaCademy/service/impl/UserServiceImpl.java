@@ -11,6 +11,7 @@ import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
+import com.enigmacamp.enigmaCademy.utils.exception.DuplicateResourceException;
 import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse saveUser(UserRequest userRequest) {
         // validasi code
+        validateDuplicateResource(userRequest);
 
         UserRole userRole = (userRequest.getUserRole() != null && !userRequest.getUserRole().isBlank()) ? UserRole.valueOf(userRequest.getUserRole()) : UserRole.STUDENT;
 
@@ -83,13 +86,20 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse updateById(Long id, UserRequest userRequest) {
         if (id == null || id <= 0 ) {
-            throw new IllegalArgumentException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
+            throw new BadRequestException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
         }
 
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
 
         user.setName(userRequest.getName());
-        user.setEmail(userRequest.getEmail());
+
+        // id = 2, ganti selain email -> email tetap
+        // id = 2, ganti email -> email di user lain exists?
+        if (!Objects.equals(user.getEmail(), userRequest.getEmail())) {
+            validateDuplicateResource(userRequest);
+            user.setEmail(userRequest.getEmail());
+        }
+
         user.setPassword(userRequest.getPassword());
 
         User newUser = userRepository.save(user);
@@ -120,5 +130,13 @@ public class UserServiceImpl implements UserService {
         List<UserResponse> userResponses = UserMapper.convertToUserListResponse(userPage.getContent());
 
         return new PageImpl<>(userResponses, pageRequest, userPage.getTotalElements());
+    }
+
+    private void validateDuplicateResource(UserRequest request) {
+        // check email duplication
+        List<User> users = userRepository.findByEmail(request.getEmail());
+        if (!users.isEmpty()) {
+            throw new DuplicateResourceException("email", request.getEmail());
+        }
     }
 }

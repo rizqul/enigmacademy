@@ -31,6 +31,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<CommonResponse<Object>> handleDuplicateResourceException(DuplicateResourceException ex, WebRequest request) {
+        CommonResponse<Object> response = CommonResponse.builder()
+                .statusCode(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CommonResponse<Object>> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
         ObjectError error = ex.getBindingResult()
