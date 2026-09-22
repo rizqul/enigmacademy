@@ -197,8 +197,7 @@ Mari kita bahas konfigurasi Spring Security lebih detail:
 
 ## Langkah Selanjutnya
 
-Pada modul berikutnya (15B-security-entity), kita akan:
-
+Pada modul berikutnya (12B_Spring_Security_Entity), kita akan:
 1. Membuat entity untuk User dan Role
 2. Menyiapkan repository untuk model keamanan
 
