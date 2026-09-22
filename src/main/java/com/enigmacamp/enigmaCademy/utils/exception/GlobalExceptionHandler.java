@@ -1,6 +1,8 @@
 package com.enigmacamp.enigmaCademy.utils.exception;
 
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
@@ -12,8 +14,9 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<CommonResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        CommonResponse<Object> response= CommonResponse.builder()
+    public ResponseEntity<CommonResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex,
+            WebRequest request) {
+        CommonResponse<Object> response = CommonResponse.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage())
                 .build();
@@ -22,7 +25,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<CommonResponse<Object>> handleBadRequestException(BadRequestException ex, WebRequest request) {
+    public ResponseEntity<CommonResponse<Object>> handleBadRequestException(BadRequestException ex,
+            WebRequest request) {
         CommonResponse<Object> response = CommonResponse.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
@@ -31,18 +35,39 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<CommonResponse<Object>> handleDuplicateResourceException(DuplicateResourceException ex, WebRequest request) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<CommonResponse<Object>> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex, WebRequest request) {
+
+        String message = "Data Sudah Terdaftar!";
+
+        if (ex.getMessage().contains("users_email_key")) {
+            message = "Alamat email sudah terdaftar!";
+        }
+
         CommonResponse<Object> response = CommonResponse.builder()
                 .statusCode(HttpStatus.CONFLICT.value())
-                .message(ex.getMessage())
+                .message(message)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    // @ExceptionHandler(DuplicateResourceException.class)
+    // public ResponseEntity<CommonResponse<Object>>
+    // handleDuplicateResourceException(DuplicateResourceException ex, WebRequest
+    // request) {
+    // CommonResponse<Object> response = CommonResponse.builder()
+    // .statusCode(HttpStatus.CONFLICT.value())
+    // .message(ex.getMessage())
+    // .build();
+
+    // return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    // }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CommonResponse<Object>> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseEntity<CommonResponse<Object>> handleValidation(MethodArgumentNotValidException ex,
+            WebRequest request) {
         ObjectError error = ex.getBindingResult()
                 .getAllErrors()
                 .getFirst();

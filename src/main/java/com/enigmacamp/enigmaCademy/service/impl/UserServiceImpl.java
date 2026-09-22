@@ -1,6 +1,5 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
-
 import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
@@ -11,7 +10,6 @@ import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
-import com.enigmacamp.enigmaCademy.utils.exception.DuplicateResourceException;
 import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,10 +35,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse saveUser(UserRequest userRequest) {
-        // validasi code
-        validateDuplicateResource(userRequest);
-
-        UserRole userRole = (userRequest.getUserRole() != null && !userRequest.getUserRole().isBlank()) ? UserRole.valueOf(userRequest.getUserRole()) : UserRole.STUDENT;
+        UserRole userRole = (userRequest.getUserRole() != null && !userRequest.getUserRole().isBlank())
+                ? UserRole.valueOf(userRequest.getUserRole())
+                : UserRole.STUDENT;
 
         User newUser = new User(
                 userRequest.getName(),
@@ -64,11 +60,10 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow( () -> new ResourceNotFoundException("user", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
 
         return UserMapper.convertToUserResponse(user);
     }
-
 
     @Override
     public List<UserResponse> searchUsers(SearchUserRequest request) {
@@ -85,21 +80,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse updateById(Long id, UserRequest userRequest) {
-        if (id == null || id <= 0 ) {
+        if (id == null || id <= 0) {
             throw new BadRequestException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
         }
 
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
-
-        user.setName(userRequest.getName());
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
 
         // id = 2, ganti selain email -> email tetap
         // id = 2, ganti email -> email di user lain exists?
         if (!Objects.equals(user.getEmail(), userRequest.getEmail())) {
-            validateDuplicateResource(userRequest);
             user.setEmail(userRequest.getEmail());
         }
 
+        user.setName(userRequest.getName());
         user.setPassword(userRequest.getPassword());
 
         User newUser = userRepository.save(user);
@@ -111,10 +105,11 @@ public class UserServiceImpl implements UserService {
     public Page<UserResponse> searchUserWithPagination(SearchUserRequest request) {
         // 1. page, size, sortBy, dan direction dalam default values
         // untuk mengantisipasi kalau saat mengirimkan request tidak disertakan valuenya
-        int page = (request.getPage() == null || request.getPage() <= 0) ? 0 : request.getPage()-1;
+        int page = (request.getPage() == null || request.getPage() <= 0) ? 0 : request.getPage() - 1;
         int size = (request.getSize() == null || request.getSize() <= 0) ? 10 : request.getSize();
         String sortBy = (request.getSortBy() == null || request.getSortBy().isEmpty()) ? "name" : request.getSortBy();
-        String direction = (request.getDirection() == null || request.getDirection().isEmpty()) ? "asc" : request.getDirection();
+        String direction = (request.getDirection() == null || request.getDirection().isEmpty()) ? "asc"
+                : request.getDirection();
 
         // 2. get specification
         Specification<User> specification = UserSpecification.getSpecification(request);
@@ -130,13 +125,5 @@ public class UserServiceImpl implements UserService {
         List<UserResponse> userResponses = UserMapper.convertToUserListResponse(userPage.getContent());
 
         return new PageImpl<>(userResponses, pageRequest, userPage.getTotalElements());
-    }
-
-    private void validateDuplicateResource(UserRequest request) {
-        // check email duplication
-        List<User> users = userRepository.findByEmail(request.getEmail());
-        if (!users.isEmpty()) {
-            throw new DuplicateResourceException("email", request.getEmail());
-        }
     }
 }
