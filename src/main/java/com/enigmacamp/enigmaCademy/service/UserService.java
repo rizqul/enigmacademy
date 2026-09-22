@@ -13,11 +13,7 @@ public interface UserService {
     UserResponse saveUser(UserRequest userRequest);
     List<UserResponse> findAllUser();
     UserResponse getUserById(Long id);
-    List<User> findByName(String name);
-    List<User> findByEmail(String email);
-    List<User> findByNameContaining(String name);
-    long countUserByRole(UserRole role);
     List<UserResponse> searchUsers(SearchUserRequest request);
-
+    UserResponse updateById(Long id, UserRequest userRequest);
     Page<UserResponse> searchUserWithPagination(SearchUserRequest request);
 }

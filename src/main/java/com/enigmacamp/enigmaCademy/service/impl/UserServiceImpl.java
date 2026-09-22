@@ -37,23 +37,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse saveUser(UserRequest userRequest) {
         // validasi code
-        if (userRequest.getName() == null || userRequest.getName().isBlank()) {
-            throw new BadRequestException("Field name tidak boleh kosong.");
-        }
-
-        if (userRequest.getEmail() == null || userRequest.getEmail().isBlank()) {
-            throw new BadRequestException("Field email tidak boleh kosong.");
-        }
-
-//        if (userRequest.getUserRole() == null) {
-//            throw new BadRequestException("Field userRole tidak boleh kosong.");
-//        }
 
         UserRole userRole = (userRequest.getUserRole() != null && !userRequest.getUserRole().isBlank()) ? UserRole.valueOf(userRequest.getUserRole()) : UserRole.STUDENT;
 
         User newUser = new User(
                 userRequest.getName(),
                 userRequest.getEmail(),
+                userRequest.getPassword(),
                 userRole);
 
         User savedUser = userRepository.save(newUser);
@@ -76,33 +66,6 @@ public class UserServiceImpl implements UserService {
         return UserMapper.convertToUserResponse(user);
     }
 
-    @Override
-    public List<User> findByName(String name) {
-        // validasi code
-
-        return userRepository.findByName(name);
-    }
-
-    @Override
-    public List<User> findByEmail(String email) {
-        // validasi code
-
-        return userRepository.findByName(email);
-    }
-
-    @Override
-    public List<User> findByNameContaining(String name) {
-        // validasi code
-
-        return  userRepository.findByNameContaining(name);
-    }
-
-    @Override
-    public long countUserByRole(UserRole role) {
-        // validasi code
-
-        return userRepository.countByRole(role);
-    }
 
     @Override
     public List<UserResponse> searchUsers(SearchUserRequest request) {
@@ -114,6 +77,24 @@ public class UserServiceImpl implements UserService {
 
         // 3. mengubah hasil menjadi response DTOs
         return UserMapper.convertToUserListResponse(users);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse updateById(Long id, UserRequest userRequest) {
+        if (id == null || id <= 0 ) {
+            throw new IllegalArgumentException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
+
+        user.setName(userRequest.getName());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());
+
+        User newUser = userRepository.save(user);
+
+        return UserMapper.convertToUserResponse(newUser);
     }
 
     @Override

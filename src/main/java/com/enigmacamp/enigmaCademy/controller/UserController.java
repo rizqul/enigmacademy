@@ -54,32 +54,17 @@ public class UserController {
      // get by id
      @GetMapping("/{id}")
      public ResponseEntity<CommonResponse<UserResponse>> getUserById(@PathVariable Long id) {
-        UserResponse menuResponse = userService.getUserById(id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, menuResponse);
+        UserResponse userResponse = userService.getUserById(id);
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, userResponse);
     }
 
-    // find by Name
-    // @GetMapping("/search/by-name")
-    // public List<User> findByName(@RequestParam String name) {
-    // return userService.findByName(name);
-    // }
-    //
-    // @GetMapping("/search/by-email")
-    // public List<User> findByEmail(@RequestParam String email) {
-    // return userService.findByEmail(email);
-    // }
-    //
-    // // find by name containing some alphabet
-    // @GetMapping("/search")
-    // public List<User> findByNameContaining(@RequestParam String name) {
-    // return userService.findByNameContaining(name);
-    // }
-    //
-    // // count by role
-    // @GetMapping("/count")
-    // public long countByRole(@RequestParam UserRole role) {
-    // return userService.countUserByRole(role);
-    // }
+    //update by id
+    @PutMapping("/{id}")
+    public ResponseEntity<CommonResponse<UserResponse>> updateById(@PathVariable Long id, @Validated(ValidationGroups.OnUpdate.class) @RequestBody UserRequest userRequest) {
+        UserResponse userResponse = userService.updateById(id, userRequest);
+
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_UPDATE_DATA, userResponse);
+    }
 
     @PostMapping("/search")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUsers(@RequestBody SearchUserRequest request) {

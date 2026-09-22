@@ -21,6 +21,9 @@ public class UserRequest {
     @Size(max = 40, groups = ValidationGroups.OnCreate.class)
     private String email;
 
+    @NotBlank(message = "Password Tidak Boleh Kosong", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
+    private String password;
+
     @NotBlank
     @ValidUserRole(groups = {ValidationGroups.OnCreate.class})
     private String userRole;
