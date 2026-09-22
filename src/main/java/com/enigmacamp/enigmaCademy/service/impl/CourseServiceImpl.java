@@ -13,10 +13,13 @@ import com.enigmacamp.enigmaCademy.service.CourseService;
 import com.enigmacamp.enigmaCademy.utils.enums.CourseStatus;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
+import com.enigmacamp.enigmaCademy.utils.exception.DuplicateResourceException;
 import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,13 +32,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public CourseResponse saveCourse(CourseRequest courseRequest) {
-        User user = userRepository.findById(courseRequest.getInstructorId()).orElseThrow(
-                () -> new ResourceNotFoundException("User", "id", courseRequest.getInstructorId())
-        );
-
-        if (!user.getUserRole().equals(UserRole.INSTRUCTOR)) {
-            throw new BadRequestException("User bukan instruktur");
-        }
+        User user = isInstructorAvailable(courseRequest.getInstructorId());
+        isInstructor(courseRequest.getInstructorId(), user);
 
         Category category = categoryRepository.findById(courseRequest.getCategoryId()).orElseThrow(
                 () -> new ResourceNotFoundException("Category", "id", courseRequest.getCategoryId())
@@ -56,5 +54,46 @@ public class CourseServiceImpl implements CourseService {
 
         Course savedCourse = courseRepository.save(newCourse);
         return CourseMapper.convertToCourseResponse(savedCourse);
+    }
+
+    @Transactional
+    @Override
+    public CourseResponse update(Long id, CourseRequest courseRequest){
+        if(id == null || id<=0){
+            throw new BadRequestException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
+        }
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("course", "id", id));
+        if (!Objects.equals(course.getTitle(), courseRequest.getTitle())) {
+            course.setTitle(courseRequest.getTitle());
+        }
+        User user = isInstructorAvailable(courseRequest.getInstructorId());
+        isInstructor(id, user);
+        Category category = isCategoryAvailable(courseRequest.getCategoryId());
+
+        course.setTitle(courseRequest.getTitle());
+        course.setCategory(category);
+        course.setDescription(courseRequest.getDescription());
+        course.setStatus(CourseStatus.valueOf(courseRequest.getStatus()));
+        course.setInstructor(user);
+
+        return CourseMapper.convertToCourseResponse(courseRepository.save(course));
+    }
+
+    public void isInstructor(Long id, User user){
+        if (!user.getUserRole().equals(UserRole.INSTRUCTOR)) {
+            throw new BadRequestException("User bukan instruktur");
+        }
+    }
+    public User isInstructorAvailable(Long id){
+
+        return userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+    }
+    public Category isCategoryAvailable(Long id){
+        return categoryRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Category", "id", id)
+        );
     }
 }
