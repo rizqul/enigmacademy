@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return UserMapper.convertToUserResponse(user);
     }
 
+    // load User By Username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);

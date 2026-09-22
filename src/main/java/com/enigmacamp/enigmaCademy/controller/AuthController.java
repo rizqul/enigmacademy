@@ -3,7 +3,7 @@ package com.enigmacamp.enigmaCademy.controller;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
-import com.enigmacamp.enigmaCademy.service.UserRegistrationService;
+import com.enigmacamp.enigmaCademy.service.AuthService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidationGroups;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/public")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserRegistrationService userRegistrationService;
+    private final AuthService userRegistrationService;
 
     // create user baru
     @PostMapping("/register")

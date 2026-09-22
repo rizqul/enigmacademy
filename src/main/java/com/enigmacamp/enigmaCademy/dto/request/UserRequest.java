@@ -30,13 +30,4 @@ public class UserRequest {
     @NotBlank
     @ValidUserRole(groups = {ValidationGroups.OnCreate.class})
     private String userRole;
-
-//    @Min(17)
-//    @Max(500)
-//    private Integer age;
-
-//    @Pattern(
-//            regexp = "^08[0-9]{10,12}"
-//    )
-//    private String phoneNumber;
 }

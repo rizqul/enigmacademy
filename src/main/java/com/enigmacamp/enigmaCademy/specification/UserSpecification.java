@@ -26,6 +26,14 @@ public class UserSpecification {
                                 "%" + request.getName().toLowerCase() + "%"));
             }
 
+            // filtering atau search berdasarkan username
+            if (request.getUsername() != null && !request.getUsername().isEmpty()) {
+                predicates.add(
+                        criteriaBuilder.like(
+                                criteriaBuilder.lower(root.get("username")),
+                                "%" + request.getUsername().toLowerCase() + "%"));
+            }
+
             // filtering atau searcj berdasarkan email
             if (request.getEmail() != null && !request.getEmail().isEmpty()) {
                 predicates.add(
@@ -46,7 +54,7 @@ public class UserSpecification {
             // Filtering By UserRole
             String userRole = request.getUserRole().toUpperCase();
 
-            if (request.getUserRole() != null && !request.getUserRole().isEmpty()) {
+            if (!request.getUserRole().isEmpty()) {
                 if (UserRole.isValid(userRole)) {
                     userRole = UserRole.valueOf(userRole).toString().toUpperCase();
                 }

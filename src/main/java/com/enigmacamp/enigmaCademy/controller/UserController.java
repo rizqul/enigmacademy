@@ -50,7 +50,6 @@ public class UserController {
         return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_GET_DATA, users);
      }
 
-
      // get by id
      @GetMapping("/{id}")
      public ResponseEntity<CommonResponse<UserResponse>> getUserById(@PathVariable Long id) {
@@ -90,11 +89,13 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchUser(
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String role,
             @RequestParam(required = false) String createdAt) {
         SearchUserRequest request = SearchUserRequest.builder()
                 .name(name)
+                .username(username)
                 .email(email)
                 .userRole(role)
                 .createdAt(createdAt)
@@ -108,6 +109,7 @@ public class UserController {
     @GetMapping("/advanced-search/page")
     public ResponseEntity<CommonResponse<List<UserResponse>>> searchWithPaging(
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
             @RequestParam(required = false, defaultValue = "STUDENT") String role,
             @RequestParam(required = false) String createdAt,
@@ -122,6 +124,7 @@ public class UserController {
             ) {
         SearchUserRequest request = SearchUserRequest.builder()
                 .name(name)
+                .username(username)
                 .email(email)
                 .userRole(role)
                 .createdAt(createdAt)
