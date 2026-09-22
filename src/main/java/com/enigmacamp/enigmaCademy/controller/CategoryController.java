@@ -6,17 +6,20 @@ import com.enigmacamp.enigmaCademy.dto.response.CategoryResponse;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.model.Category;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
-import com.enigmacamp.enigmaCademy.service.UserService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -25,7 +28,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category save(@Valid @RequestBody CategoryRequest category){
+    public Category save(@Valid @RequestBody CategoryRequest category) {
         return categoryService.save(new Category(category.getName(), category.getDescription()));
     }
 
@@ -42,11 +45,11 @@ public class CategoryController {
 //    }
 
     @GetMapping("/search")
-    public ResponseEntity<CommonResponse<List<CategoryResponse>>> searchCategory (
+    public ResponseEntity<CommonResponse<List<CategoryResponse>>> searchCategory(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description
     ) {
-        SearchCategoryRequest request =SearchCategoryRequest.builder()
+        SearchCategoryRequest request = SearchCategoryRequest.builder()
                 .name(name)
                 .description(description)
                 .build();
