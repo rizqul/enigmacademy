@@ -16,6 +16,9 @@ public class UserRequest {
     @NotBlank(message = "nama tidak boleh kosong", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
     private String name;
 
+    @NotBlank(message = "username tidak boleh kosong", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
+    private String username;
+
     @NotBlank
     @Email(message = "email tidak sesuai aturan", groups = {ValidationGroups.OnCreate.class, ValidationGroups.OnUpdate.class})
     @Size(max = 40, groups = ValidationGroups.OnCreate.class)
