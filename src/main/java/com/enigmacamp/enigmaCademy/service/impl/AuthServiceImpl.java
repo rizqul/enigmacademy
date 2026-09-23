@@ -1,22 +1,64 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
+import com.enigmacamp.enigmaCademy.dto.request.LoginRequest;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
+import com.enigmacamp.enigmaCademy.dto.response.LoginResponse;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.mapper.UserMapper;
 import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
+import com.enigmacamp.enigmaCademy.security.jwt.JwtUtils;
 import com.enigmacamp.enigmaCademy.service.AuthService;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
+
+    // kebutuhan auth
+    private final AuthenticationManager authenticationManager;
+
+    // untuk generate token
+    private final JwtUtils jwtUtils;
+
+    @Override
+    public void loginUser(LoginRequest request) {
+        // authenticare menggunakan authenticationManager
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+
+        // set authentication didalam security context
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Generate jwt token
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        // get role
+        String role = jwtUtils.getRoleFromJwtToken(jwt);
+
+        // return response
+//        return LoginResponse.builder()
+//                .token(jwt)
+//                .role(role)
+//                .username(request.getUsername())
+//                .build();
+    }
+
     @Override
     public UserResponse registerUser(UserRequest request) {
         UserRole userRole = (request.getUserRole() != null && !request.getUserRole().isBlank())
