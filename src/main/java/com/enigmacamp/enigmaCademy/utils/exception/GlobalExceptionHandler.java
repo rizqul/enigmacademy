@@ -5,6 +5,7 @@ import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,17 +54,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
-    // @ExceptionHandler(DuplicateResourceException.class)
-    // public ResponseEntity<CommonResponse<Object>>
-    // handleDuplicateResourceException(DuplicateResourceException ex, WebRequest
-    // request) {
-    // CommonResponse<Object> response = CommonResponse.builder()
-    // .statusCode(HttpStatus.CONFLICT.value())
-    // .message(ex.getMessage())
-    // .build();
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<CommonResponse<Object>> handleBadCredential(
+            BadCredentialsException ex,
+            WebRequest request) {
 
-    // return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-    // }
+        CommonResponse<Object> response = CommonResponse.builder()
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(response);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CommonResponse<Object>> handleValidation(MethodArgumentNotValidException ex,

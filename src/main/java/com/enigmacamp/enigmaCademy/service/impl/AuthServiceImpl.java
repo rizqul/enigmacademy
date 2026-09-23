@@ -13,6 +13,7 @@ import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
 
     @Override
-    public void loginUser(LoginRequest request) {
+    public LoginResponse loginUser(LoginRequest request) throws BadCredentialsException {
         // authenticare menggunakan authenticationManager
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -52,11 +53,11 @@ public class AuthServiceImpl implements AuthService {
         String role = jwtUtils.getRoleFromJwtToken(jwt);
 
         // return response
-//        return LoginResponse.builder()
-//                .token(jwt)
-//                .role(role)
-//                .username(request.getUsername())
-//                .build();
+        return LoginResponse.builder()
+                .token(jwt)
+                .role(role)
+                .username(request.getUsername())
+                .build();
     }
 
     @Override
