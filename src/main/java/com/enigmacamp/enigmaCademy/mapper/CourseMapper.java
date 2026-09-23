@@ -22,7 +22,7 @@ public class CourseMapper {
         return courseResponse;
     }
 
-    // maper untuk list
+    // mapper untuk list
     public static List<CourseResponse> convertToUserListResponse(List<Course> courses) {
         return courses.stream()
                 .map(CourseMapper::convertToCourseResponse)

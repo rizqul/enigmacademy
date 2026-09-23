@@ -21,9 +21,8 @@ public class UserMapper {
 
     // maper untuk list
     public static List<UserResponse> convertToUserListResponse(List<User> users) {
-        List<UserResponse> listOfUsers = users.stream()
+        return users.stream()
                 .map(UserMapper::convertToUserResponse)
                 .toList();
-        return  listOfUsers;
     }
 }
