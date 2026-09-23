@@ -29,7 +29,7 @@ import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
 
@@ -69,12 +69,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
 
         return UserMapper.convertToUserResponse(user);
-    }
-
-    // load User By Username
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
     }
 
     @Override
