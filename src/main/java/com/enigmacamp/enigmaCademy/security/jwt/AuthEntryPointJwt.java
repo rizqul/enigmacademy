@@ -21,7 +21,7 @@ import java.io.IOException;
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         // print error jika ada unauthorized error
         log.error("Unauthorized error : " + authException.getMessage());
 
@@ -30,7 +30,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         CommonResponse<Object> errorResponse = CommonResponse.builder()
-                .statusCode(HttpStatus.UPGRADE_REQUIRED.value())
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .message("Unauthorized + " + authException.getMessage())
                 .build();
 

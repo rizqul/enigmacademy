@@ -1,5 +1,6 @@
 package com.enigmacamp.enigmaCademy.config;
 
+import com.enigmacamp.enigmaCademy.security.jwt.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,51 +10,39 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final AuthTokenFilter authTokenFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((auth) -> auth.requestMatchers("/api/v1/public/**")
-                        .permitAll()
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/public/**").permitAll()
                         .anyRequest()
-                        .authenticated())
-                .httpBasic(httpBasic -> {});
+                        .authenticated());
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsManager() {
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin123"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        UserDetails instructor = User.builder()
-//                .username("instructor")
-//                .password(passwordEncoder().encode("instructor123"))
-//                .roles("INSTRUCTOR")
-//                .build();
-//
-//        UserDetails student = User.builder()
-//                .username("student")
-//                .password(passwordEncoder().encode("student123"))
-//                .roles("STUDENT")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(admin, instructor, student);
-//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
