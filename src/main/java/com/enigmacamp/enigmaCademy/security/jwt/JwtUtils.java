@@ -33,7 +33,9 @@ public class JwtUtils {
         String role = userPrincipal.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
-                .toString();
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalStateException("User tidak memiliki role"));
 
         // proses pembuatan jwt
         return JWT.create()
