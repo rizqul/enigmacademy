@@ -1,6 +1,5 @@
-package com.enigmacamp.enigmaCademy.model;
+package com.enigmacamp.enigmaCademy.entity;
 
-import com.enigmacamp.enigmaCademy.dto.request.CategoryRequest;
 import jakarta.persistence.*;
 import lombok.*;
 

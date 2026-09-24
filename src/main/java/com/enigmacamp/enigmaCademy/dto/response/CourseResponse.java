@@ -1,7 +1,7 @@
 package com.enigmacamp.enigmaCademy.dto.response;
 
-import com.enigmacamp.enigmaCademy.model.Category;
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.Category;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.utils.enums.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.enigmacamp.enigmaCademy.config;
 
 
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import jakarta.annotation.PostConstruct;

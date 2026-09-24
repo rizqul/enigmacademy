@@ -1,6 +1,6 @@
 package com.enigmacamp.enigmaCademy.repository;
 
-import com.enigmacamp.enigmaCademy.model.Course;
+import com.enigmacamp.enigmaCademy.entity.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

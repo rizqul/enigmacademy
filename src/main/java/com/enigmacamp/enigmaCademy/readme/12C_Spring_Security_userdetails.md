@@ -139,11 +139,12 @@ public class SecurityConfig {
 ### Langkah 3: Buat Admin User Awal
 
 Buat class untuk membuat admin user awal saat aplikasi pertama kali dijalankan:
+
 ```java
 package com.enigmacamp.enigmaCademy.config;
 
 
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import jakarta.annotation.PostConstruct;
@@ -162,7 +163,7 @@ public class AdminInitializer {
     @Transactional
     public void initAdminUser() {
         // validasi apakah admin sudah exist
-        if(!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByUsername("admin")) {
             User admin = User.builder()
                     .username("admin")
                     .name("admin")
@@ -202,7 +203,7 @@ package com.enigmacamp.enigmaCademy.service.impl;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.mapper.UserMapper;
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.AuthService;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
@@ -215,7 +216,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
+
     @Override
     public UserResponse registerUser(UserRequest request) {
         UserRole userRole = (request.getUserRole() != null && !request.getUserRole().isBlank())

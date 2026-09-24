@@ -1,7 +1,7 @@
 package com.enigmacamp.enigmaCademy.specification;
 
 import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 
 import jakarta.persistence.criteria.Predicate;

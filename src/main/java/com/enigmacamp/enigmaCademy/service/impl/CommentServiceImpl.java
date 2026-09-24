@@ -1,0 +1,40 @@
+package com.enigmacamp.enigmaCademy.service.impl;
+
+import com.enigmacamp.enigmaCademy.model.Comment;
+import com.enigmacamp.enigmaCademy.service.CommentService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+
+import java.util.Collections;
+import java.util.List;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class CommentServiceImpl implements CommentService {
+
+    private final RestClient restClient;
+
+    @Override
+    public List<Comment> getAllComments() {
+        try {
+            return restClient.get()
+                    .uri("/comments")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<List<Comment>>() {
+                        @Override
+                        public String toString() {
+                            return super.toString();
+                        }
+                    });
+        }catch (Exception e) {
+            log.error("Error fetching semua comments : " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+}

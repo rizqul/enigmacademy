@@ -1,4 +1,4 @@
-package com.enigmacamp.enigmaCademy.model;
+package com.enigmacamp.enigmaCademy.entity;
 
 import com.enigmacamp.enigmaCademy.utils.enums.CourseStatus;
 import jakarta.persistence.CascadeType;

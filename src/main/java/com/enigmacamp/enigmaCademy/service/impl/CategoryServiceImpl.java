@@ -3,7 +3,7 @@ package com.enigmacamp.enigmaCademy.service.impl;
 import com.enigmacamp.enigmaCademy.dto.request.SearchCategoryRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CategoryResponse;
 import com.enigmacamp.enigmaCademy.mapper.CategoryMapper;
-import com.enigmacamp.enigmaCademy.model.Category;
+import com.enigmacamp.enigmaCademy.entity.Category;
 import com.enigmacamp.enigmaCademy.repository.CategoryRepository;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
 import com.enigmacamp.enigmaCademy.specification.CategorySpecification;

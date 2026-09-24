@@ -4,23 +4,16 @@ import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
-import com.enigmacamp.enigmaCademy.mapper.UserMapper;
-import com.enigmacamp.enigmaCademy.model.User;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
-import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidationGroups;
-import jakarta.validation.Valid;
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

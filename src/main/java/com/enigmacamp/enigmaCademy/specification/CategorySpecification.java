@@ -1,7 +1,7 @@
 package com.enigmacamp.enigmaCademy.specification;
 
 import com.enigmacamp.enigmaCademy.dto.request.SearchCategoryRequest;
-import com.enigmacamp.enigmaCademy.model.Category;
+import com.enigmacamp.enigmaCademy.entity.Category;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

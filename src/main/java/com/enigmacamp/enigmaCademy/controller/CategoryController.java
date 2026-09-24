@@ -4,7 +4,7 @@ import com.enigmacamp.enigmaCademy.dto.request.CategoryRequest;
 import com.enigmacamp.enigmaCademy.dto.request.SearchCategoryRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CategoryResponse;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
-import com.enigmacamp.enigmaCademy.model.Category;
+import com.enigmacamp.enigmaCademy.entity.Category;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -3,8 +3,6 @@ package com.enigmacamp.enigmaCademy.controller;
 import com.enigmacamp.enigmaCademy.dto.request.CourseRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.dto.response.CourseResponse;
-import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
-import com.enigmacamp.enigmaCademy.model.Course;
 import com.enigmacamp.enigmaCademy.service.CourseService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;

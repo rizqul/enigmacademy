@@ -44,8 +44,9 @@ public enum UserRole {
 ```
 
 Langkah 2: Membuat Entity User
+
 ```java
-package com.enigmacamp.enigmaCademy.model;
+package com.enigmacamp.enigmaCademy.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -102,19 +103,19 @@ public class User extends BaseEntity implements UserDetails {
 ### Langkah 3: Membuat Repository untuk User dan Role
 
 Buat interface repository untuk User:
+
 ```java
 package com.enigmacamp.enigmaCademy.repository;
 
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     User findByUsername(String username);
+
     boolean existsByUsername(String username);
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.userRole=:role")
@@ -125,31 +126,38 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 ### Langkah 4: Membuat Service untuk User
 
 Buat interface UserService:
+
 ```java
 package com.enigmacamp.enigmaCademy.service;
 
 import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
-import com.enigmacamp.enigmaCademy.model.User;
-import com.enigmacamp.enigmaCademy.utils.enums.UserRole;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface UserService {
     UserResponse saveUser(UserRequest userRequest);
+
     List<UserResponse> findAllUser();
+
     UserResponse getUserById(Long id);
+
     List<UserResponse> searchUsers(SearchUserRequest request);
+
     UserResponse updateById(Long id, UserRequest userRequest);
+
     UserResponse deleteById(Long id);
+
     UserResponse softDeleteById(Long id);
+
     Page<UserResponse> searchUserWithPagination(SearchUserRequest request);
 }
 ```
 
 Implementasi UserService:
+
 ```java
 package com.enigmacamp.enigmaCademy.service.impl;
 
@@ -157,7 +165,7 @@ import com.enigmacamp.enigmaCademy.dto.request.SearchUserRequest;
 import com.enigmacamp.enigmaCademy.dto.request.UserRequest;
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
 import com.enigmacamp.enigmaCademy.mapper.UserMapper;
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 import com.enigmacamp.enigmaCademy.repository.UserRepository;
 import com.enigmacamp.enigmaCademy.service.UserService;
 import com.enigmacamp.enigmaCademy.specification.UserSpecification;
@@ -270,7 +278,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public UserResponse deleteById(Long id) {
 
-        if (id == null || id <= 0){
+        if (id == null || id <= 0) {
             throw new BadRequestException("Id tidak boleh kosong atau lebih kecil/sama dengan nol");
         }
 

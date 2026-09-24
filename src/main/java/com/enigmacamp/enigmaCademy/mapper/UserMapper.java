@@ -1,7 +1,7 @@
 package com.enigmacamp.enigmaCademy.mapper;
 
 import com.enigmacamp.enigmaCademy.dto.response.UserResponse;
-import com.enigmacamp.enigmaCademy.model.User;
+import com.enigmacamp.enigmaCademy.entity.User;
 
 import java.util.List;
 

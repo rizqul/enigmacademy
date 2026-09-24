@@ -52,6 +52,7 @@ public class SecurityConfig {
 //                                .policy("camera=(), microphone=(), geolocation=()")) // pengaturan browser fitur
                 )
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/api/v1/json/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
