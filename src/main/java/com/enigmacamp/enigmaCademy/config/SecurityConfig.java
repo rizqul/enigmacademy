@@ -48,11 +48,18 @@ public class SecurityConfig {
                                 ) // xss
                         .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';")) //CSP
                         .referrerPolicy(referer -> referer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)) // mengcontrol referer header
-                        .permissionsPolicy(permissionsPolicy -> permissionsPolicy
-                                .policy("camera=(), microphone=(), geolocation=()")) // pengaturan browser fitur
+//                        .permissionsPolicy(permissionsPolicy -> permissionsPolicy
+//                                .policy("camera=(), microphone=(), geolocation=()")) // pengaturan browser fitur
                 )
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-resource/**",
+                                "/swagger-ui.html",
+                                "/api-docs/**"
+                        ).permitAll()
                         .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated());
