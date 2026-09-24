@@ -36,12 +36,11 @@ public class AuthController {
 
     // login user
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse<String>> loginUser(
+    public ResponseEntity<CommonResponse<LoginResponse>> loginUser(
             @Valid
             @RequestBody LoginRequest request) {
-//        LoginResponse loginResponse = authService.loginUser(request);
-        authService.loginUser(request);
+        LoginResponse loginResponse = authService.loginUser(request);
 
-        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_LOGIN, "berhasil login");
+        return ResponseUtil.buildResponse(HttpStatus.OK, ResponseMessage.SUCCES_LOGIN, loginResponse);
     }
 }
