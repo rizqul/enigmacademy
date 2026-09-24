@@ -9,6 +9,9 @@ import com.enigmacamp.enigmaCademy.service.AuthService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidationGroups;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +25,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name="Auth", description = "Auth endpoint")
 public class AuthController {
     private final AuthService authService;
     // register user baru
+    @Operation(
+        summary = "Register new User",
+            description = "ini adalah endpoint registreasi user baru",
+            responses = {
+                @ApiResponse(responseCode = "200",
+                description = "berhasil melakukan registrasi")
+    })
     @PostMapping("/register")
     public ResponseEntity<CommonResponse<UserResponse>> registerUser(
             @Validated(ValidationGroups.OnCreate.class)
