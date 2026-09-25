@@ -1,9 +1,9 @@
-package com.enigmacamp.enigmaCademy.service;
+package com.enigmacamp.enigmaCademy.service.impl;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class CalculatorService {
+public class CalculatorServiceImpl {
 
     public int sumNumbers(int a, int b) {
         return a+b;
