@@ -47,9 +47,9 @@ public class CommentServiceImpl implements CommentService {
             return  restClient.post()
                     .uri("/comments")
                     .accept(MediaType.APPLICATION_JSON)
-                    .body(commentRequest)
+                    .body(commentRequest) // body request data type
                     .retrieve()
-                    .body(Comment.class);
+                    .body(Comment.class); // body response data type
         }catch (Exception e){
             log.error("Error add comments : " + e.getMessage());
             return null;
