@@ -10,4 +10,5 @@ public interface CommentService {
     List<Comment> getAllComments();
     Comment addComment(CommentRequest commentRequest);
     CommentResponse getCommentById(Integer id);
+    void deleteComment(Integer id);
 }

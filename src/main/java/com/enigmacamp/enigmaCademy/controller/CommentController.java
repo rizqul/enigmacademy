@@ -59,4 +59,13 @@ public class CommentController {
 
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommonResponse<Void>> deleteComment(@PathVariable Integer id) {
+        commentService.deleteComment(id);
+
+        CommonResponse<Void> response = CommonResponse.<Void>builder()
+                .
+
+    }
 }

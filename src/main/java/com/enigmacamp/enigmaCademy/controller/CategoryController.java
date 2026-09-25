@@ -6,6 +6,9 @@ import com.enigmacamp.enigmaCademy.dto.response.CategoryResponse;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.entity.Category;
 import com.enigmacamp.enigmaCademy.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categories")
+@Tag(name = "Fitur Category", description = "Category endpoint")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -27,6 +31,14 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @Operation(
+            summary = "Create new Category",
+                description = "endpoint add category",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "berhasil menambahkan category")
+            }
+    )
     @PostMapping
     public Category save(@Valid @RequestBody CategoryRequest category) {
         return categoryService.save(new Category(category.getName(), category.getDescription()));
@@ -44,6 +56,14 @@ public class CategoryController {
 //        return convertToListOfCategoryResponse(categoryService.findByKeyword(keyword));
 //    }
 
+    @Operation(
+            summary = "Get Category",
+            description = "endpoint mencari category",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "berhasil mendapatkan category")
+            }
+    )
     @GetMapping("/search")
     public ResponseEntity<CommonResponse<List<CategoryResponse>>> searchCategory(
             @RequestParam(required = false) String name,

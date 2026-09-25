@@ -4,6 +4,7 @@ import com.enigmacamp.enigmaCademy.dto.request.CommentRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CommentResponse;
 import com.enigmacamp.enigmaCademy.model.Comment;
 import com.enigmacamp.enigmaCademy.service.CommentService;
+import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -67,6 +68,22 @@ public class CommentServiceImpl implements CommentService {
         } catch (Exception e) {
             log.error("Error menampilkan comment :" + e.getMessage());
             return null;
+        }
+    }
+
+    @Override
+    public void deleteComment(Integer id) {
+        if (id == null || id <= 0) {
+            throw new BadRequestException("ID tidak boleh kurang dari nol");
+        }
+
+        try {
+            restClient.delete()
+                    .uri("/comments/id", id)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            log.error("Gagal menghapus: ", e.getMessage());
         }
     }
 }

@@ -46,6 +46,13 @@ public class AuthController {
     }
 
     // login user
+    @Operation(
+            summary = "Login User",
+                description = "endpoint login system",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                    description = "berhasil login system")
+    })
     @PostMapping("/login")
     public ResponseEntity<CommonResponse<LoginResponse>> loginUser(
             @Valid
