@@ -30,13 +30,10 @@ public class CommentController {
     public ResponseEntity<CommonResponse<List<Comment>>> getAllComments() {
         List<Comment> comments = commentService.getAllComments();
 
-        CommonResponse<List<Comment>> response = CommonResponse.<List<Comment>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("berhasil mengambil semua comment")
-                .data(comments)
-                .build();
-
-                return ResponseEntity.ok(response);
+        return ResponseUtil.buildResponse(
+                HttpStatus.CREATED,
+                ResponseMessage.SUCCES_CREATE_DATA,
+                comments);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
