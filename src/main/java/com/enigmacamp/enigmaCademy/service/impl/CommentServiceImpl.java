@@ -61,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponse getCommentById(Integer id) {
         try {
             return restClient.get()
-                    .uri("/comments/{id}")
+                    .uri("/comments/" + id)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .body(CommentResponse.class);
@@ -79,11 +79,11 @@ public class CommentServiceImpl implements CommentService {
 
         try {
             restClient.delete()
-                    .uri("/comments/id", id)
+                    .uri("/comments/" + id)
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
-            log.error("Gagal menghapus: ", e.getMessage());
+            log.error("Gagal menghapus: " + e.getMessage());
         }
     }
 }

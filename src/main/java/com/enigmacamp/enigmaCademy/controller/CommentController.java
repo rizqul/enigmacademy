@@ -51,21 +51,21 @@ public class CommentController {
     public ResponseEntity<CommonResponse<CommentResponse>> getCommentById(@PathVariable Integer id){
         CommentResponse comment = commentService.getCommentById(id);
 
-        CommonResponse<CommentResponse> response = CommonResponse.<CommentResponse>builder()
-                .statusCode((HttpStatus.OK.value()))
-                .message(ResponseMessage.SUCCES_GET_DATA)
-                .data(comment)
-                .build();
-
-        return ResponseEntity.ok(response);
+        return ResponseUtil.buildResponse(
+                HttpStatus.OK,
+                ResponseMessage.SUCCES_GET_DATA,
+                comment
+        );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse<Void>> deleteComment(@PathVariable Integer id) {
         commentService.deleteComment(id);
 
-        CommonResponse<Void> response = CommonResponse.<Void>builder()
-                .
-
+        return ResponseUtil.buildResponse(
+                HttpStatus.OK,
+                ResponseMessage.SUCCES_DELETE_DATA,
+                null
+        );
     }
 }
