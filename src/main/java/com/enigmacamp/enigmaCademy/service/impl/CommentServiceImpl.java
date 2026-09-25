@@ -1,6 +1,7 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
 import com.enigmacamp.enigmaCademy.dto.request.CommentRequest;
+import com.enigmacamp.enigmaCademy.dto.response.CommentResponse;
 import com.enigmacamp.enigmaCademy.model.Comment;
 import com.enigmacamp.enigmaCademy.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,20 @@ public class CommentServiceImpl implements CommentService {
                     .body(Comment.class);
         }catch (Exception e){
             log.error("Error add comments : " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public CommentResponse getCommentById(Integer id) {
+        try {
+            return restClient.get()
+                    .uri("/comments/{id}")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .body(CommentResponse.class);
+        } catch (Exception e) {
+            log.error("Error menampilkan comment :" + e.getMessage());
             return null;
         }
     }

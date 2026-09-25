@@ -1,6 +1,7 @@
 package com.enigmacamp.enigmaCademy.controller;
 
 import com.enigmacamp.enigmaCademy.dto.request.CommentRequest;
+import com.enigmacamp.enigmaCademy.dto.response.CommentResponse;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 import com.enigmacamp.enigmaCademy.model.Comment;
 import com.enigmacamp.enigmaCademy.service.CommentService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -46,5 +48,18 @@ public class CommentController {
                 ResponseMessage.SUCCES_CREATE_DATA,
                 comment
         );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommonResponse<CommentResponse>> getCommentById(@PathVariable Integer id){
+        CommentResponse comment = commentService.getCommentById(id);
+
+        CommonResponse<CommentResponse> response = CommonResponse.<CommentResponse>builder()
+                .statusCode((HttpStatus.OK.value()))
+                .message(ResponseMessage.SUCCES_GET_DATA)
+                .data(comment)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }
