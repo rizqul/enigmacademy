@@ -86,4 +86,19 @@ public class CommentServiceImpl implements CommentService {
             log.error("Gagal menghapus: " + e.getMessage());
         }
     }
+
+    @Override
+    public CommentResponse update(Integer id, CommentRequest request) {
+
+        try {
+           return restClient.put()
+                    .uri("/comments/" + id)
+                    .body(request)
+                    .retrieve()
+                    .body(CommentResponse.class);
+        }catch (Exception e) {
+            log.error("Failed to update data: " + e.getMessage());
+            return null;
+        }
+    }
 }

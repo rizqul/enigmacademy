@@ -37,7 +37,7 @@ public class CommentController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommonResponse<Comment>> addComment(@RequestBody CommentRequest commentRequest){
+    public ResponseEntity<CommonResponse<Comment>> addComment(@RequestBody CommentRequest commentRequest) {
         Comment comment = commentService.addComment(commentRequest);
 
         return ResponseUtil.buildResponse(
@@ -48,7 +48,7 @@ public class CommentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<CommentResponse>> getCommentById(@PathVariable Integer id){
+    public ResponseEntity<CommonResponse<CommentResponse>> getCommentById(@PathVariable Integer id) {
         CommentResponse comment = commentService.getCommentById(id);
 
         return ResponseUtil.buildResponse(
@@ -67,5 +67,18 @@ public class CommentController {
                 ResponseMessage.SUCCES_DELETE_DATA,
                 null
         );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommonResponse<CommentResponse>> update(
+            @PathVariable Integer id,
+            @RequestBody CommentRequest request) {
+
+        CommentResponse response = commentService.update(id, request);
+
+        return ResponseUtil.buildResponse(
+                HttpStatus.OK,
+                ResponseMessage.SUCCES_UPDATE_DATA,
+                response);
     }
 }
