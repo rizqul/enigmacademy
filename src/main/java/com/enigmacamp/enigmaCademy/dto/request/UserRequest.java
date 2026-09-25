@@ -3,6 +3,8 @@ package com.enigmacamp.enigmaCademy.dto.request;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidLmsEmail;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidUserRole;
 import com.enigmacamp.enigmaCademy.utils.validators.ValidationGroups;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,5 +31,10 @@ public class UserRequest {
 
     @NotBlank
     @ValidUserRole(groups = {ValidationGroups.OnCreate.class})
+    @Schema(
+            description = "Role dari user",
+            allowableValues = {"STUDENT", "ADMIN", "INFRASTRUKTUR"}, // <-- Mengatur pilihan di Swagger
+            example = "STUDENT"
+    )
     private String userRole;
 }

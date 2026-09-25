@@ -1,11 +1,13 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
+import com.enigmacamp.enigmaCademy.dto.request.CommentRequest;
 import com.enigmacamp.enigmaCademy.model.Comment;
 import com.enigmacamp.enigmaCademy.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -35,6 +37,21 @@ public class CommentServiceImpl implements CommentService {
         }catch (Exception e) {
             log.error("Error fetching semua comments : " + e.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public Comment addComment(CommentRequest commentRequest) {
+        try {
+            return  restClient.post()
+                    .uri("/comments")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(commentRequest)
+                    .retrieve()
+                    .body(Comment.class);
+        }catch (Exception e){
+            log.error("Error add comments : " + e.getMessage());
+            return null;
         }
     }
 }
