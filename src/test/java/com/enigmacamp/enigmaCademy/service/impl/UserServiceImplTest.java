@@ -72,15 +72,6 @@ public class UserServiceImplTest {
                 "ipan123"
         );
 
-        User storedUser = new User(
-                1L,
-                "Ipan",
-                "ipan_unyu",
-                "ipan@student.enigmacademy.com",
-                UserRole.STUDENT,
-                "ipan123"
-        );
-
         newUser.setId(1L);
 
         // meniru behaviour dari userRepository.save()
