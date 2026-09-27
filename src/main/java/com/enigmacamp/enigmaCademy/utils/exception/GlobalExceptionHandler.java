@@ -2,16 +2,22 @@ package com.enigmacamp.enigmaCademy.utils.exception;
 
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -55,7 +61,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<CommonResponse<Object>> handleBadCredential(
+    public ResponseEntity<CommonResponse<Object>> handleBadCredentialException(
             BadCredentialsException ex,
             WebRequest request) {
 
@@ -71,7 +77,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CommonResponse<Object>> handleValidation(MethodArgumentNotValidException ex,
+    public ResponseEntity<CommonResponse<Object>> handleValidationException(MethodArgumentNotValidException ex,
             WebRequest request) {
         ObjectError error = ex.getBindingResult()
                 .getAllErrors()
@@ -85,5 +91,62 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // Existing exception handlers...
+
+    // Security-specific exception handlers
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CommonResponse<Object>> handleAccessDeniedException(
+            AccessDeniedException ex, HttpServletRequest request) {
+
+        log.warn("Access denied for request to {}: {}", request.getRequestURI(), ex.getMessage());
+
+        CommonResponse<Object> response = CommonResponse.builder()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .message("Anda tidak memiliki akses ke resource ini")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<CommonResponse<Object>> handleDisabledException(
+            DisabledException ex, HttpServletRequest request) {
+
+        CommonResponse<Object> response = CommonResponse.builder()
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .message("Akun dinonaktifkan, silakan hubungi administrator")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<CommonResponse<Object>> handleLockedException(
+            LockedException ex, HttpServletRequest request) {
+
+        CommonResponse<Object> response = CommonResponse.builder()
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .message("Akun terkunci, silakan coba lagi nanti atau hubungi administrator")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<CommonResponse<Object>> handleAuthenticationException(
+            AuthenticationException ex, HttpServletRequest request) {
+
+        log.warn("Authentication exception for request to {}: {}",
+                request.getRequestURI(), ex.getMessage());
+
+        CommonResponse<Object> response = CommonResponse.builder()
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .message("Autentikasi gagal: " + ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 }
