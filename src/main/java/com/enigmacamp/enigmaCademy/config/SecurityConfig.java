@@ -1,7 +1,6 @@
 package com.enigmacamp.enigmaCademy.config;
 
 import com.enigmacamp.enigmaCademy.security.jwt.AuthTokenFilter;
-import com.enigmacamp.enigmaCademy.security.jwt.JwtAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
