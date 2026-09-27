@@ -1,5 +1,6 @@
 package com.enigmacamp.enigmaCademy.config;
 
+import com.enigmacamp.enigmaCademy.filter.RateLimitFilter;
 import com.enigmacamp.enigmaCademy.security.jwt.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
     private final AuthTokenFilter authTokenFilter;
+    private final RateLimitFilter rateLimitFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -65,6 +67,7 @@ public class SecurityConfig {
 
         http.authenticationProvider(authenticationProvider());
 
+        http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
