@@ -93,8 +93,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    // Existing exception handlers...
-
     // Security-specific exception handlers
 
     @ExceptionHandler(AccessDeniedException.class)
