@@ -43,12 +43,12 @@ public class SecurityConfig {
                         .frameOptions(frameOptions -> frameOptions.deny()) // prevent clickjacking didalam iframes
                         .contentTypeOptions(Customizer.withDefaults()) // prebent MIME-sniffing
                         .xssProtection(
-                                        xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
-                                ) // xss
+                                xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                        ) // xss
                         .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';")) //CSP
                         .referrerPolicy(referer -> referer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)) // mengcontrol referer header
-//                        .permissionsPolicy(permissionsPolicy -> permissionsPolicy
-//                                .policy("camera=(), microphone=(), geolocation=()")) // pengaturan browser fitur
+                        .permissionsPolicyHeader(permissionsPolicy -> permissionsPolicy
+                                .policy("camera=(), microphone=(), geolocation=()")) // pengaturan browser fitur
                 )
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
