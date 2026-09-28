@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -290,9 +291,9 @@ class UserServiceImplTest {
         Pageable pageable = pageableCaptor.getValue();
         assertEquals(1, pageable.getPageNumber());
         assertEquals(5, pageable.getPageSize());
-        assertEquals(Sort.Direction.DESC, pageable.getSort().getOrderFor("email").getDirection());
+        assertEquals(Sort.Direction.DESC, Objects.requireNonNull(pageable.getSort().getOrderFor("email")).getDirection());
         assertEquals(11, responsePage.getTotalElements());
-        assertEquals("Ipan", responsePage.getContent().get(0).getName());
+        assertEquals("Ipan", responsePage.getContent().getFirst().getName());
     }
 
     @Test
