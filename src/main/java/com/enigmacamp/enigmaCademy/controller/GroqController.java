@@ -2,6 +2,7 @@ package com.enigmacamp.enigmaCademy.controller;
 
 import com.enigmacamp.enigmaCademy.dto.request.GroqQuizRequest;
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
+
 import com.enigmacamp.enigmaCademy.service.GroqService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
@@ -24,13 +25,11 @@ public class GroqController {
     }
 
     @PostMapping("/quiz")
-    public ResponseEntity<CommonResponse<String>> generateQuiz(
+    public ResponseEntity<String> generateQuiz(
             @RequestBody GroqQuizRequest request
             ) {
 
-        return ResponseUtil.buildResponse(
-                HttpStatus.CREATED,
-                ResponseMessage.SUCCES_GENERATE_DATA,
-                groqService.generateQuiz(request));
+
+        return ResponseEntity.ok(groqService.generateQuiz(request));
     }
 }
