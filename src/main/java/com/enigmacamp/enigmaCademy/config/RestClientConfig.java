@@ -75,6 +75,4 @@ public class RestClientConfig {
                 .requestFactory(groqTimeoutConfiguration())
                 .build();
     }
-
-
 }
