@@ -5,6 +5,7 @@ import com.enigmacamp.enigmaCademy.repository.FileStorageRepository;
 import com.enigmacamp.enigmaCademy.service.FileStorageService;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,9 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FileStorageServiceImpl implements FileStorageService {
-    private FileStorageRepository fileStorageRepository;
+    private final FileStorageRepository fileStorageRepository;
 
     @Value("${app.upload.dir:./uploads}")
     private String uploadDir;
@@ -38,10 +40,13 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
 
-            Files.createDirectory(this.fileStorageLocation);
+            // validasi kalau folder sudah ada, nggak perlu di create
+            if(!Files.exists(this.fileStorageLocation)){
+                Files.createDirectory(this.fileStorageLocation);
+            }
             log.info("Direktory sudah berhasil dibuat di " + this.fileStorageLocation);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Gagal dalam proses pembuatan direktori : " + e.getMessage());
         }
     }
