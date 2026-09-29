@@ -4,7 +4,6 @@ import com.enigmacamp.enigmaCademy.dto.request.GroqQuizRequest;
 import com.enigmacamp.enigmaCademy.dto.response.GroqResponse;
 import com.enigmacamp.enigmaCademy.service.GroqService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class GroqServiceImpl implements GroqService {
     @Value("${groq.api.url}")
     private String apiUrl;
 
-    @Value("${groq.api.key}")
+    @Value("${groq.ai.key}")
     private String apiKey;
 
     public GroqServiceImpl(
@@ -86,7 +85,7 @@ public class GroqServiceImpl implements GroqService {
             // 5. Eksekusi request ke Groq
             GroqResponse response = groqClient.post()
                     .uri(apiUrl)
-                    .header("Authorization", "Bearer" + apiKey)
+                    .header("Authorization", "Bearer " + apiKey)
                     .body(requestBody)
                     .retrieve()
                     .body(GroqResponse.class);
@@ -99,7 +98,9 @@ public class GroqServiceImpl implements GroqService {
             // 7. Return
             return response
                     .getChoices()
-                    .getFirst().toString();
+                    .getFirst()
+                    .getMessage()
+                    .getContent();
 
         } catch (Exception e) {
             log.error("Failed to generate quiz form groq");
