@@ -15,6 +15,9 @@ public class RestClientConfig {
     @Value("${api.jsonplaceholder.base-url:https://jsonplaceholder.typicode.com/}")
     private String jsonPlaceholderBaseUrl;
 
+    @Value("${groq.api.url:https://api.groq.com/openai/v1/chat/completions}")
+    private String groqBaseUrl;
+
     // intercept(satpam) untuk logging request dan response
     private ClientHttpRequestInterceptor loggingInterceptor() {
         return ((request, body, execution) -> {
@@ -33,6 +36,13 @@ public class RestClientConfig {
         return factory;
     }
 
+    private SimpleClientHttpRequestFactory groqTimeoutConfiguration() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(5000); // 5 detik otomatis timeout
+        factory.setReadTimeout(60000); // 1 menit otomatis timeout
+        return factory;
+    }
+
     // Bean Primary
     @Bean
     @Primary
@@ -41,7 +51,6 @@ public class RestClientConfig {
                 .baseUrl(jsonPlaceholderBaseUrl)
                 .build();
     }
-
 
     // Bean kedua
     @Bean("placeholderClient")
@@ -56,4 +65,16 @@ public class RestClientConfig {
                 .requestFactory(timeoutConfiguration())
                 .build();
     }
+
+    @Bean("groqClient")
+    public RestClient groqClient() {
+        return RestClient.builder()
+                .baseUrl(groqBaseUrl)
+                .defaultHeader(HttpHeaders.ACCEPT, "application/json")
+                .requestInterceptor(loggingInterceptor())
+                .requestFactory(groqTimeoutConfiguration())
+                .build();
+    }
+
+
 }
