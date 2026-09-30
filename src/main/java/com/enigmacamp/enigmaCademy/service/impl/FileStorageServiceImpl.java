@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -32,6 +33,7 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class FileStorageServiceImpl implements FileStorageService {
     private final FileStorageRepository fileStorageRepository;
 
@@ -132,6 +134,30 @@ public class FileStorageServiceImpl implements FileStorageService {
                 new ResourceNotFoundException("file", "id", id)
         );
         return FileMapper.convertToFileResponse(fileStorage);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFileById(Long id) {
+        // 1. get file data
+        FileStorage fileStorage = fileStorageRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("file", "id", id));
+
+        try {
+        // 2. validate apakah file exist didalam storage
+        Path filePath = this.fileStorageLocation
+                .resolve(fileStorage.getFileName())
+                .normalize();
+
+        // 3. hapus file fisik didalam storage
+        Files.deleteIfExists(filePath);
+        
+        // 4. hapus metadatanya
+        fileStorageRepository.delete(fileStorage);
+
+        } catch (IOException e) {
+            throw new ResourceNotFoundException("file", "id", id);
+        }
     }
 
     private String getFileExtension(String fileName) {

@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +44,7 @@ public class FileStorageController {
     public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
         // load resource
         Resource resource = fileStorageService.loadFileAsResource(id);
+
         // sediakan file info
         FileResponse fileInfo = fileStorageService.getFileById(id);
 
@@ -50,5 +52,16 @@ public class FileStorageController {
                 .contentType(MediaType.parseMediaType(fileInfo.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileInfo.getName() + "\"")
                 .body(resource);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommonResponse<String>> deleteFile(@PathVariable Long id) {
+        fileStorageService.deleteFileById(id);
+
+        return ResponseUtil.buildResponse(
+                HttpStatus.OK,
+                ResponseMessage.SUCCES_DELETE_DATA,
+                "File berhasil dihapus"
+        );
     }
 }

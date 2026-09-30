@@ -9,4 +9,5 @@ public interface FileStorageService {
     FileStorage store(MultipartFile file, String category, String referenceId);
     Resource loadFileAsResource(Long id);
     FileResponse getFileById(Long id);
+    void deleteFileById(Long id);
 }
