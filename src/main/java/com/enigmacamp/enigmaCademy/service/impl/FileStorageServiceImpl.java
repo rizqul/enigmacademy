@@ -2,6 +2,7 @@ package com.enigmacamp.enigmaCademy.service.impl;
 
 import com.enigmacamp.enigmaCademy.dto.response.FileResponse;
 import com.enigmacamp.enigmaCademy.entity.FileStorage;
+import com.enigmacamp.enigmaCademy.mapper.FileMapper;
 import com.enigmacamp.enigmaCademy.repository.FileStorageRepository;
 import com.enigmacamp.enigmaCademy.service.FileStorageService;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
@@ -109,7 +110,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         FileStorage fileStorage = fileStorageRepository.findById(id).orElseThrow( () ->
                 new ResourceNotFoundException("file", "id", id)
         );
-        return
+        return FileMapper.convertToFileResponse(fileStorage);
     }
 
     private String getFileExtension(String fileName) {
