@@ -1,24 +1,24 @@
 package com.enigmacamp.enigmaCademy.controller;
 
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
+import com.enigmacamp.enigmaCademy.dto.response.FileResponse;
 import com.enigmacamp.enigmaCademy.entity.FileStorage;
 import com.enigmacamp.enigmaCademy.service.FileStorageService;
 import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
 import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
 public class FileStorageController {
     private final FileStorageService fileStorageService;
@@ -37,5 +37,18 @@ public class FileStorageController {
                 ResponseMessage.SUCCES_SAVE_DATA,
                 savedFile
         );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
+        // load resource
+        Resource resource = fileStorageService.loadFileAsResource(id);
+        // sediakan file info
+        FileResponse fileInfo = fileStorageService.getFileById(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(fileInfo.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileInfo.getName() + "\"")
+                .body(resource);
     }
 }

@@ -12,12 +12,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -99,9 +101,28 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public Resource loadFileAsResource(Long id) {
         try {
-            // get file by id
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            // get file by id untuk mendapatkan entity dari file (metadata)
+            FileStorage fileStorage = fileStorageRepository.findById(id).orElseThrow( () ->
+                    new ResourceNotFoundException("file", "id", id)
+            );
+
+            // sediakan file untuk download
+            Path filePath = this.fileStorageLocation
+                    .resolve(fileStorage.getFileName())
+                    .normalize();
+
+            // mengubah file menjadi resource
+            Resource resource = new UrlResource(filePath.toUri());
+
+            // melakukan validasi apakah resource kosong atau tidak
+            if(resource.exists()) {
+                return resource;
+            } else {
+                throw new ResourceNotFoundException("file", "id", id);
+            }
+
+        } catch (MalformedURLException e) {
+            throw new ResourceNotFoundException("file", "id", id);
         }
     }
 
