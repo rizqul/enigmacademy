@@ -1,13 +1,16 @@
 package com.enigmacamp.enigmaCademy.service.impl;
 
+import com.enigmacamp.enigmaCademy.dto.response.FileResponse;
 import com.enigmacamp.enigmaCademy.entity.FileStorage;
 import com.enigmacamp.enigmaCademy.repository.FileStorageRepository;
 import com.enigmacamp.enigmaCademy.service.FileStorageService;
 import com.enigmacamp.enigmaCademy.utils.exception.BadRequestException;
+import com.enigmacamp.enigmaCademy.utils.exception.ResourceNotFoundException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -90,6 +93,23 @@ public class FileStorageServiceImpl implements FileStorageService {
         } catch (Exception e) {
             throw new RuntimeException("gagal menyimpan file : " + originalFilename + e.getMessage());
         }
+    }
+
+    @Override
+    public Resource loadFileAsResource(Long id) {
+        try {
+            // get file by id
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public FileResponse getFileById(Long id) {
+        FileStorage fileStorage = fileStorageRepository.findById(id).orElseThrow( () ->
+                new ResourceNotFoundException("file", "id", id)
+        );
+        return
     }
 
     private String getFileExtension(String fileName) {
