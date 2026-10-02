@@ -14,5 +14,5 @@ RUN --mount=type=cache,target=/root/.m2 \
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 COPY --from=builder /app/target/*.jar enigmaCademy-0.0.1-SNAPSHOT.jar
-EXPOSE 9999
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/enigmaCademy-0.0.1-SNAPSHOT.jar"]
