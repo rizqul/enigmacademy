@@ -128,8 +128,6 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
-    // Security-specific exception handlers
-
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<CommonResponse<Object>> handleAccessDeniedException(
             AccessDeniedException ex, HttpServletRequest request) {

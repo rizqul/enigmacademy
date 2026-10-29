@@ -1,13 +1,8 @@
 package com.enigmacamp.enigmaCademy.controller;
 
 import com.enigmacamp.enigmaCademy.dto.request.GroqQuizRequest;
-import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
-
 import com.enigmacamp.enigmaCademy.service.GroqService;
-import com.enigmacamp.enigmaCademy.utils.ResponseUtil;
-import com.enigmacamp.enigmaCademy.utils.constants.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,8 +1,6 @@
 package com.enigmacamp.enigmaCademy.security.jwt;
 
 import com.enigmacamp.enigmaCademy.dto.response.CommonResponse;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
-import java.awt.*;
 import java.io.IOException;
 
 @Component
